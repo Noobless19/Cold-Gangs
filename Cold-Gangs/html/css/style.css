@@ -1,0 +1,874 @@
+:root {
+    --primary-color: #ff3e3e;
+    --secondary-color: #007bff;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --dark-bg: rgba(30, 30, 30, 0.95);
+    --card-bg: rgba(40, 40, 40, 0.8);
+    --text-light: #fff;
+    --text-muted: #aaa;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    --transition: all 0.3s ease;
+    --border-radius: 8px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: transparent;
+    color: var(--text-light);
+    height: 100vh;
+    overflow: hidden;
+}
+
+[v-cloak] {
+    display: none;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.sidebar {
+    width: 250px;
+    background: var(--dark-bg);
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border-color);
+}
+
+.gang-info {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 20px;
+}
+
+.gang-info h2 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.gang-tag {
+    background: var(--primary-color);
+    color: var(--text-light);
+    padding: 3px 10px;
+    border-radius: 15px;
+    display: inline-block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.gang-rank {
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.gang-bank {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.menu {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.menu-item {
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+}
+
+.menu-item i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+.menu-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.menu-item.active {
+    background: var(--primary-color);
+    color: var(--text-light);
+}
+
+.close-btn {
+    padding: 15px 20px;
+    text-align: center;
+    cursor: pointer;
+    border-top: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.close-btn:hover {
+    background: var(--danger-color);
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.tab-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.tab-content h2 {
+    margin-bottom: 20px;
+    color: var(--primary-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+/* Dashboard */
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+.stat-title {
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.stat-value {
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+.dashboard-sections {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.dashboard-section {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.dashboard-section h3 {
+    margin-bottom: 15px;
+    color: var(--secondary-color);
+}
+
+.activity-list, .online-members {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.activity-item {
+    display: flex;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.activity-time {
+    width: 60px;
+    color: var(--text-muted);
+}
+
+.activity-desc {
+    flex: 1;
+}
+
+.online-member {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.member-rank {
+    color: var(--text-muted);
+}
+
+/* Members */
+.action-bar {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.action-btn {
+    background: var(--secondary-color);
+    color: var(--text-light);
+    border: none;
+    padding: 10px 15px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.action-btn i {
+    margin-right: 5px;
+}
+
+.action-btn:hover {
+    background: #0069d9;
+}
+
+.action-btn.small {
+    padding: 5px 10px;
+    font-size: 12px;
+}
+
+.action-btn.danger {
+    background: var(--danger-color);
+}
+
+.action-btn.danger:hover {
+    background: #c82333;
+}
+
+.action-btn.cancel {
+    background: #6c757d;
+}
+
+.action-btn.cancel:hover {
+    background: #5a6268;
+}
+
+.members-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.member-card {
+    background: var(--card-bg);
+    padding: 15px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.member-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.member-name {
+    font-weight: bold;
+}
+
+.member-status {
+    color: #dc3545;
+}
+
+.member-status.online {
+    color: #28a745;
+}
+
+.member-details {
+    margin-bottom: 15px;
+    color: var(--text-muted);
+}
+
+.member-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Territories */
+.territories-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.territory-card {
+    background: var(--card-bg);
+    padding: 15px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.territory-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.territory-name {
+    font-weight: bold;
+}
+
+.territory-type {
+    color: var(--text-muted);
+    text-transform: capitalize;
+}
+
+.territory-details {
+    margin-bottom: 15px;
+}
+
+.territory-status {
+    color: #28a745;
+}
+
+.territory-status.contested {
+    color: #dc3545;
+}
+
+.territory-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Businesses */
+.businesses-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.business-card {
+    background: var(--card-bg);
+    padding: 15px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.business-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.business-name {
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.business-income {
+    color: #28a745;
+}
+
+.business-details {
+    margin-bottom: 15px;
+    color: var(--text-muted);
+}
+
+.business-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Drugs */
+.drugs-sections {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.drugs-section {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.drugs-section h3 {
+    margin-bottom: 15px;
+    color: var(--secondary-color);
+}
+
+.drugs-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.drug-card {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: var(--border-radius);
+}
+
+.drug-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.drug-name {
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.drug-stage, .drug-level {
+    color: var(--text-muted);
+}
+
+.drug-details {
+    margin-bottom: 15px;
+    color: var(--text-muted);
+}
+
+.drug-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Wars */
+.wars-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.war-card {
+    background: var(--card-bg);
+    padding: 15px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.war-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.war-name {
+    font-weight: bold;
+}
+
+.war-status {
+    color: var(--warning-color);
+    text-transform: capitalize;
+}
+
+.war-details {
+    margin-bottom: 15px;
+    color: var(--text-muted);
+}
+
+.war-score {
+    font-size: 1.5em;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.war-score .attacker {
+    color: var(--danger-color);
+}
+
+.war-score .separator {
+    margin: 0 10px;
+}
+
+.war-score .defender {
+    color: var(--info-color);
+}
+
+.war-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Heists */
+.heists-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.heist-card {
+    background: var(--card-bg);
+    padding: 15px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.heist-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.heist-name {
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.heist-status {
+    color: var(--warning-color);
+    text-transform: capitalize;
+}
+
+.heist-details {
+    margin-bottom: 15px;
+    color: var(--text-muted);
+}
+
+.heist-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Vehicles */
+.vehicles-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.vehicle-card {
+    background: var(--card-bg);
+    padding: 15px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.vehicle-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.vehicle-name {
+    font-weight: bold;
+}
+
+.vehicle-plate {
+    color: var(--text-muted);
+}
+
+.vehicle-details {
+    margin-bottom: 15px;
+    color: var(--text-muted);
+}
+
+.vehicle-status {
+    color: #dc3545;
+}
+
+.vehicle-status.stored {
+    color: #28a745;
+}
+
+.vehicle-impounded {
+    color: #ffc107;
+    margin-top: 5px;
+}
+
+.vehicle-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Stashes */
+.stashes-sections {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.stashes-section {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.stashes-section h3 {
+    margin-bottom: 15px;
+    color: var(--secondary-color);
+}
+
+.stashes-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.stash-card {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: var(--border-radius);
+}
+
+.stash-header {
+    margin-bottom: 10px;
+}
+
+.stash-name {
+    font-weight: bold;
+}
+
+.stash-details {
+    margin-bottom: 15px;
+    color: var(--text-muted);
+}
+
+.stash-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Bank */
+.bank-balance {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+.balance-label {
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.balance-amount {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.bank-actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.bank-transactions {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.bank-transactions h3 {
+    margin-bottom: 15px;
+    color: var(--secondary-color);
+}
+
+.transactions-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.transaction-item {
+    display: flex;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.transaction-time {
+    width: 60px;
+    color: var(--text-muted);
+}
+
+.transaction-desc {
+    flex: 1;
+}
+
+/* Settings */
+.settings-sections {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.settings-section {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.settings-section h3 {
+    margin-bottom: 15px;
+    color: var(--secondary-color);
+}
+
+.settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    color: var(--text-muted);
+}
+
+.form-group input, .form-group select {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    padding: 8px 12px;
+    border-radius: var(--border-radius);
+    color: var(--text-light);
+}
+
+.form-group button {
+    align-self: flex-start;
+    margin-top: 5px;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: var(--dark-bg);
+    border-radius: var(--border-radius);
+    width: 100%;
+    max-width: 500px;
+    box-shadow: var(--shadow);
+}
+
+.modal-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    color: var(--primary-color);
+}
+
+.close-modal {
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.upgrade-cost, .upgrade-effects {
+    margin-top: 5px;
+    color: var(--text-muted);
+}
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ff5555;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .menu {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .menu-item {
+        padding: 10px 15px;
+    }
+
+    .dashboard-stats,
+    .dashboard-sections,
+    .members-list,
+    .territories-list,
+    .businesses-list,
+    .drugs-sections,
+    .wars-list,
+    .heists-list,
+    .vehicles-list,
+    .stashes-sections,
+    .settings-sections {
+        grid-template-columns: 1fr;
+    }
+}
