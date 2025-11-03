@@ -44,6 +44,8 @@ client_scripts {
 server_scripts {
   '@oxmysql/lib/MySQL.lua',
   'server/core/init.lua',
+  'server/core/ratelimit.lua',
+  'server/core/validation.lua',
   'server/core/permissions.lua',
   'server/core/db.lua',
   'server/core/api.lua',
