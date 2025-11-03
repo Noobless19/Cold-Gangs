@@ -2,6 +2,8 @@ local QBCore = exports['qb-core']:GetCoreObject()
 
 local graffitis = {}
 local playerCooldowns = {}
+local usableItemsRegistered = false
+local serverEventsRegistered = false
 
 CreateThread(function()
   InitializeDatabase()
@@ -94,6 +96,8 @@ function LoadGraffitis()
 end
 
 function RegisterUsableItems()
+  if usableItemsRegistered then return end
+  usableItemsRegistered = true
   QBCore.Functions.CreateUseableItem(Config.Graffiti.sprayCanItem, function(source)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
@@ -127,6 +131,8 @@ function RegisterUsableItems()
 end
 
 function RegisterServerEvents()
+  if serverEventsRegistered then return end
+  serverEventsRegistered = true
   QBCore.Functions.CreateCallback('cold-gangs:graffiti:GetConfig', function(src, cb) cb(Config.Graffiti) end)
 
   RegisterNetEvent('cold-gangs:server:RequestGraffitis', function()

@@ -106,12 +106,21 @@ RegisterNetEvent('cold-gangs:labs:depositItem', function(labId, item, amount)
   if not lab then return end
   local owner = MySQL.Sync.fetchAll('SELECT gang_id FROM territories WHERE name = ?', {lab.territory_name})
   if not owner or #owner==0 or owner[1].gang_id ~= gid then return end
+  local amt = tonumber(amount) or 0
+  amt = math.floor(amt)
+  if amt <= 0 then
+    TriggerClientEvent('QBCore:Notify', src, 'Invalid amount', 'error')
+    return
+  end
   local it = Player.Functions.GetItemByName(item)
-  if not it or it.amount < amount then return end
-  Player.Functions.RemoveItem(item, amount)
-  TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[item], "remove", amount)
+  if not it or (it.amount or 0) < amt then
+    TriggerClientEvent('QBCore:Notify', src, 'Not enough items', 'error')
+    return
+  end
+  Player.Functions.RemoveItem(item, amt)
+  TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[item], "remove", amt)
   local current = (labInventories[labId] and labInventories[labId][item]) or 0
-  saveLabInventory(labId, item, current + amount)
+  saveLabInventory(labId, item, current + amt)
 end)
 RegisterNetEvent('cold-gangs:labs:withdrawItem', function(labId, item, amount)
   local src = source
@@ -124,10 +133,19 @@ RegisterNetEvent('cold-gangs:labs:withdrawItem', function(labId, item, amount)
   local owner = MySQL.Sync.fetchAll('SELECT gang_id FROM territories WHERE name = ?', {lab.territory_name})
   if not owner or #owner==0 or owner[1].gang_id ~= gid then return end
   local inv = labInventories[labId] or {}
-  if not inv[item] or inv[item] < amount then return end
-  Player.Functions.AddItem(item, amount)
-  TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[item], "add", amount)
-  saveLabInventory(labId, item, inv[item] - amount)
+  local amt = tonumber(amount) or 0
+  amt = math.floor(amt)
+  if amt <= 0 then
+    TriggerClientEvent('QBCore:Notify', src, 'Invalid amount', 'error')
+    return
+  end
+  if not inv[item] or inv[item] < amt then
+    TriggerClientEvent('QBCore:Notify', src, 'Not enough stock in lab', 'error')
+    return
+  end
+  Player.Functions.AddItem(item, amt)
+  TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[item], "add", amt)
+  saveLabInventory(labId, item, inv[item] - amt)
 end)
 QBCore.Functions.CreateCallback('cold-gangs:labs:getLabInventory', function(source, cb, labId)
   cb(labInventories[labId] or {})
