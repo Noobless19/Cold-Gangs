@@ -1,0 +1,1319 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cold Gangs Tablet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Tablet Container -->
+  <div id="tablet" class="tablet-container hidden" aria-hidden="true">
+    <div class="tablet-frame">
+
+      <!-- Status bar -->
+      <div class="status-bar" role="banner">
+        <div class="status-left">
+          <span class="server-name">Cold Gangs</span>
+        </div>
+        <div class="status-center">
+          <span id="sb-clock">--:--</span>
+        </div>
+        <div class="status-right">
+          <button id="btn-close" class="admin-close-btn" title="Close" aria-label="Close tablet">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tablet screen area -->
+      <div class="tablet-screen" role="main">
+
+        <!-- HOME -->
+        <section id="home-screen" class="screen active" role="region" aria-label="Home screen">
+          <header class="admin-header">
+            <div class="admin-profile">
+              <div class="admin-logo">
+                <i class="fas fa-crown"></i>
+              </div>
+              <div class="admin-info">
+                <h1 id="home-player-name">Unknown</h1>
+                <div class="admin-rank" id="home-player-rank">Rank: 0</div>
+              </div>
+            </div>
+            <div>
+              <span class="player-count-badge" id="home-gang-chip">No Gang</span>
+            </div>
+          </header>
+
+          <!-- Quick stats -->
+          <div class="quick-stats" aria-label="Quick stats">
+            <div class="stat-card" role="status">
+              <i class="fas fa-users"></i>
+              <span class="stat-value" id="stat-members">0</span>
+              <span class="stat-label">Members</span>
+            </div>
+            <div class="stat-card" role="status">
+              <i class="fas fa-map-marked-alt"></i>
+              <span class="stat-value" id="stat-territories">0</span>
+              <span class="stat-label">Territories</span>
+            </div>
+            <div class="stat-card" role="status">
+              <i class="fas fa-piggy-bank"></i>
+              <span class="stat-value" id="stat-bank">$0</span>
+              <span class="stat-label">Gang Bank</span>
+            </div>
+          </div>
+
+          <!-- Apps -->
+          <nav class="app-grid" id="app-grid" aria-label="Applications">
+            <button class="app-icon" data-open="gang-screen" aria-label="Open Gang app">
+              <div class="app-icon-bg staff-chat-app">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <div class="app-label">Gang</div>
+            </button>
+
+            <button class="app-icon" data-open="territories-screen" aria-label="Open Territories app">
+              <div class="app-icon-bg world-app">
+                <i class="fas fa-map"></i>
+              </div>
+              <div class="app-label">Territories</div>
+            </button>
+
+            <button class="app-icon" data-open="stash-screen" aria-label="Open Stash app">
+              <div class="app-icon-bg inventory-app">
+                <i class="fas fa-box"></i>
+              </div>
+              <div class="app-label">Stash</div>
+            </button>
+
+            <button class="app-icon" data-open="bank-screen" aria-label="Open Bank app">
+              <div class="app-icon-bg community-app">
+                <i class="fas fa-university"></i>
+              </div>
+              <div class="app-label">Bank</div>
+            </button>
+
+            <button class="app-icon" data-open="members-screen" aria-label="Open Members app">
+              <div class="app-icon-bg players-app">
+                <i class="fas fa-user-friends"></i>
+              </div>
+              <div class="app-label">Members</div>
+            </button>
+
+            <button class="app-icon" data-open="businesses-screen" aria-label="Open Businesses app">
+              <div class="app-icon-bg inventory-app">
+                <i class="fas fa-store"></i>
+              </div>
+              <div class="app-label">Businesses</div>
+            </button>
+
+            <button class="app-icon" data-open="vehicles-screen" aria-label="Open Vehicles app">
+              <div class="app-icon-bg vehicles-app">
+                <i class="fas fa-car"></i>
+              </div>
+              <div class="app-label">Vehicles</div>
+            </button>
+
+            <button class="app-icon" data-open="drugs-screen" aria-label="Open Labs & Fields app">
+              <div class="app-icon-bg developer-app">
+                <i class="fas fa-flask"></i>
+              </div>
+              <div class="app-label">Labs & Fields</div>
+            </button>
+
+            <button class="app-icon" data-open="heists-screen" aria-label="Open Heists app">
+              <div class="app-icon-bg troll-app">
+                <i class="fas fa-user-secret"></i>
+              </div>
+              <div class="app-label">Heists</div>
+            </button>
+
+            <button class="app-icon" data-open="wars-screen" aria-label="Open Wars app">
+              <div class="app-icon-bg punishment-app">
+                <i class="fas fa-crosshairs"></i>
+              </div>
+              <div class="app-label">Wars</div>
+            </button>
+
+            <button class="app-icon" data-open="settings-screen" aria-label="Open Settings app">
+              <div class="app-icon-bg settings-app">
+                <i class="fas fa-cog"></i>
+              </div>
+              <div class="app-label">Settings</div>
+            </button>
+
+            <!-- Admin (visible only if isAdmin) -->
+            <button class="app-icon hidden" id="app-admin" data-open="admin-screen" aria-label="Open Admin app">
+              <div class="app-icon-bg staff-chat-app">
+                <i class="fas fa-user-shield"></i>
+              </div>
+              <div class="app-label">Admin</div>
+              <div class="app-badge">!</div>
+            </button>
+          </nav>
+
+          <div class="tablet-home-button">
+            <button title="Home" aria-label="Home handle button"></button>
+          </div>
+        </section>
+
+        <!-- GANG -->
+        <section id="gang-screen" class="screen" role="region" aria-label="Gang">
+          <div class="app-header">
+            <button class="back-btn" data-back aria-label="Back to Home">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2><i class="fas fa-shield-alt"></i> Gang</h2>
+            <div class="app-header-right">
+              <span class="player-count-badge" id="gang-summary">Loading...</span>
+              <button class="back-btn" title="Refresh" id="btn-refresh-gang" aria-label="Refresh Gang">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="app-content" id="gang-content">
+            <!-- Overview -->
+            <div class="form-card">
+              <h3><i class="fas fa-info-circle"></i> Summary</h3>
+              <div class="player-details-section">
+                <div class="player-detail-row">
+                  <div class="player-detail-label">Name</div>
+                  <div class="player-detail-value" id="gang-name">No Gang</div>
+                </div>
+                <div class="player-detail-row">
+                  <div class="player-detail-label">Tag</div>
+                  <div class="player-detail-value" id="gang-tag"></div>
+                </div>
+                <div class="player-detail-row">
+                  <div class="player-detail-label">Bank</div>
+                  <div class="player-detail-value" id="gang-bank">£0</div>
+                </div>
+                <div class="player-detail-row">
+                  <div class="player-detail-label">Reputation</div>
+                  <div class="player-detail-value" id="gang-rep">0</div>
+                </div>
+                <div class="player-detail-row">
+                  <div class="player-detail-label">Max Members</div>
+                  <div class="player-detail-value" id="gang-max">0</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Transactions -->
+            <div class="form-card mt">
+              <h3><i class="fas fa-receipt"></i> Recent Transactions</h3>
+              <div class="search-bar-container">
+                <i class="fas fa-search"></i>
+                <input class="tablet-input tablet-search" id="tx-search" placeholder="Search by description..." />
+              </div>
+              <div class="players-list-tablet" id="tx-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TERRITORIES -->
+        <section id="territories-screen" class="screen" role="region" aria-label="Territories">
+          <div class="app-header">
+            <button class="back-btn" data-back aria-label="Back to Home">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2><i class="fas fa-map"></i> Territories</h2>
+            <div class="app-header-right">
+              <button class="back-btn" title="Refresh" id="btn-refresh-territories" aria-label="Refresh Territories">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="app-content">
+            <div class="search-bar-container">
+              <i class="fas fa-search"></i>
+              <input class="tablet-input tablet-search" id="territory-search" placeholder="Search territories..." />
+              <div class="filter-chips" id="territory-filters">
+                <div class="filter-chip active" data-filter="all">All</div>
+                <div class="filter-chip" data-filter="owned">Owned</div>
+                <div class="filter-chip" data-filter="unclaimed">Unclaimed</div>
+                <div class="filter-chip" data-filter="contested">Contested</div>
+              </div>
+            </div>
+
+            <div class="players-list-tablet" id="territory-list"></div>
+          </div>
+
+          <!-- Territory Drawer -->
+          <aside id="territory-drawer" class="drawer hidden" aria-hidden="true">
+            <div class="drawer-content">
+              <header class="app-header">
+                <button class="back-btn" data-close-drawer aria-label="Close">
+                  <i class="fas fa-times"></i>
+                </button>
+                <h2>Territory Details</h2>
+              </header>
+              <div class="app-content">
+                <div class="form-card">
+                  <h3><i class="fas fa-info-circle"></i> Overview</h3>
+                  <div class="player-details-section">
+                    <div class="player-detail-row">
+                      <div class="player-detail-label">Name</div>
+                      <div class="player-detail-value" id="td-name"></div>
+                    </div>
+                    <div class="player-detail-row">
+                      <div class="player-detail-label">Owner</div>
+                      <div class="player-detail-value" id="td-owner"></div>
+                    </div>
+                    <div class="player-detail-row">
+                      <div class="player-detail-label">Status</div>
+                      <div class="player-detail-value" id="td-status"></div>
+                    </div>
+                    <div class="player-detail-row">
+                      <div class="player-detail-label">Value</div>
+                      <div class="player-detail-value" id="td-value">$0</div>
+                    </div>
+			      <div class="player-detail-row">
+        <div class="player-detail-label">Business Front</div>
+        <div class="player-detail-value" id="td-front">-</div>
+      </div>
+                  </div>
+                </div>
+
+                <div class="form-card mt">
+                  <h3><i class="fas fa-chart-line"></i> Influences</h3>
+                  <div class="players-list-tablet" id="td-influences"></div>
+                </div>
+
+                <div class="form-card mt">
+                  <h3><i class="fas fa-tools"></i> Upgrades</h3>
+                  <div class="quick-actions-bar">
+                    <div class="quick-action-btn" data-upgrade="sales">
+                      <i class="fas fa-dollar-sign"></i><span>Sales</span>
+                    </div>
+                    <div class="quick-action-btn" data-upgrade="quality">
+                      <i class="fas fa-gem"></i><span>Quality</span>
+                    </div>
+                    <div class="quick-action-btn" data-upgrade="security">
+                      <i class="fas fa-shield-alt"></i><span>Security</span>
+                    </div>
+                    <div class="quick-action-btn" data-upgrade="income">
+                      <i class="fas fa-coins"></i><span>Income</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-card mt">
+                  <h3><i class="fas fa-tasks"></i> Actions</h3>
+                  <div class="quick-actions-bar">
+                    <div class="quick-action-btn" data-action="view">
+                      <i class="fas fa-map-marker-alt"></i><span>Waypoint</span>
+                    </div>
+                    <div class="quick-action-btn" data-action="capture">
+                      <i class="fas fa-flag"></i><span>Capture</span>
+                    </div>
+                    <div class="quick-action-btn" data-action="defend">
+                      <i class="fas fa-shield-alt"></i><span>Defend</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <!-- STASHES -->
+        <section id="stash-screen" class="screen" role="region" aria-label="Stash Management">
+          <div class="app-header">
+            <button class="back-btn" data-back aria-label="Back to Home">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2><i class="fas fa-box"></i> Stash Management</h2>
+            <div class="app-header-right">
+              <button class="back-btn" title="Refresh" id="btn-refresh-stash" aria-label="Refresh Stash">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="app-content" id="stash-content">
+            <!-- Main Gang Stash -->
+            <div class="form-card">
+              <h3><i class="fas fa-warehouse"></i> Main Gang Stash</h3>
+              <div class="player-details-section">
+                <div class="player-detail-row">
+                  <div class="player-detail-label">Status</div>
+                  <div class="player-detail-value">
+                    <span class="ac-status" id="mainStashStatus">Not Set</span>
+                  </div>
+                </div>
+                <div class="player-detail-row">
+                  <div class="player-detail-label">Slots</div>
+                  <div class="player-detail-value" id="mainStashSlots">-</div>
+                </div>
+                <div class="player-detail-row">
+                  <div class="player-detail-label">Weight Capacity</div>
+                  <div class="player-detail-value"><span id="mainStashWeight">-</span> kg</div>
+                </div>
+                <div class="player-detail-row">
+                  <div class="player-detail-label">Location</div>
+                  <div class="player-detail-value" id="mainStashLoc">-</div>
+                </div>
+              </div>
+              <div class="quick-actions-bar mt">
+                <div class="quick-action-btn" id="setMainStashBtn">
+                  <i class="fas fa-map-marker-alt"></i><span>Set Location Here</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Shared Stashes -->
+            <div class="form-card mt">
+              <h3><i class="fas fa-boxes"></i> Shared Stashes</h3>
+              <div class="search-bar-container">
+                <i class="fas fa-search"></i>
+                <input class="tablet-input tablet-search" id="shared-stash-search" placeholder="Search shared stashes..." />
+              </div>
+              <div class="players-list-tablet" id="sharedStashList">
+                <p style="color: rgba(255,255,255,0.5); text-align: center; padding: 20px;">No shared stashes created yet</p>
+              </div>
+              
+              <div class="quick-actions-bar mt">
+                <div class="quick-action-btn" id="createSharedStashBtn">
+                  <i class="fas fa-plus-circle"></i><span>Create New Shared Stash</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- BANK -->
+        <section id="bank-screen" class="screen" role="region" aria-label="Bank">
+          <div class="app-header">
+            <button class="back-btn" data-back aria-label="Back to Home">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2><i class="fas fa-university"></i> Bank</h2>
+            <div class="app-header-right">
+              <button class="back-btn" title="Refresh" id="btn-refresh-bank" aria-label="Refresh Bank">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="app-content" id="bank-content">
+            <div class="form-card">
+              <h3><i class="fas fa-piggy-bank"></i> Balance</h3>
+              <div class="player-details-section">
+                <div class="player-detail-row">
+                  <div class="player-detail-label">Gang Bank</div>
+                  <div class="player-detail-value" id="bank-balance">$0</div>
+                </div>
+                <div class="player-detail-row">
+                  <div class="player-detail-label">Your Cash</div>
+                  <div class="player-detail-value" id="bank-cash">$0</div>
+                </div>
+              </div>
+              
+              <div class="quick-actions-bar">
+                <div class="quick-action-btn" data-bank="deposit">
+                  <i class="fas fa-plus-circle"></i><span>Deposit</span>
+                </div>
+                <div class="quick-action-btn" data-bank="withdraw">
+                  <i class="fas fa-minus-circle"></i><span>Withdraw</span>
+                </div>
+                <div class="quick-action-btn" data-bank="transfer">
+                  <i class="fas fa-exchange-alt"></i><span>Transfer</span>
+                </div>
+              </div>
+              
+              <div class="grid two">
+                <input class="tablet-input" id="bank-deposit-amt" type="number" placeholder="Deposit amount" />
+                <input class="tablet-input" id="bank-withdraw-amt" type="number" placeholder="Withdraw amount" />
+              </div>
+              <div class="grid three mt">
+                <input class="tablet-input" id="bank-transfer-gid" type="number" placeholder="Target Gang ID" />
+                <input class="tablet-input" id="bank-transfer-amt" type="number" placeholder="Amount" />
+                <input class="tablet-input" id="bank-transfer-reason" type="text" placeholder="Reason" />
+              </div>
+            </div>
+
+            <div class="form-card mt">
+              <h3><i class="fas fa-history"></i> History</h3>
+              <div class="players-list-tablet" id="bank-tx-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- MEMBERS -->
+        <section id="members-screen" class="screen" role="region" aria-label="Members">
+          <div class="app-header">
+            <button class="back-btn" data-back aria-label="Back to Home">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2><i class="fas fa-users"></i> Members</h2>
+            <div class="app-header-right">
+              <button class="back-btn" title="Refresh" id="btn-refresh-members" aria-label="Refresh Members">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="app-content">
+            <div class="search-bar-container">
+              <i class="fas fa-search"></i>
+              <input class="tablet-input tablet-search" id="members-search" placeholder="Search members..." />
+              <div class="filter-chips" id="members-filter">
+                <div class="filter-chip active" data-filter="all">All</div>
+                <div class="filter-chip" data-filter="online">Online</div>
+                <div class="filter-chip" data-filter="offline">Offline</div>
+              </div>
+            </div>
+
+            <div class="players-list-tablet" id="members-list"></div>
+
+            <div class="form-card mt">
+              <h3><i class="fas fa-user-plus"></i> Invite</h3>
+              <div class="grid two">
+                <input class="tablet-input" id="invite-server-id" type="number" placeholder="Server ID"/>
+                <button class="submit-btn" data-action="invite">
+                  <i class="fas fa-paper-plane"></i> Invite
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Member Detail Drawer -->
+          <aside id="member-drawer" class="drawer hidden" aria-hidden="true">
+            <div class="drawer-content">
+              <header class="app-header">
+                <button class="back-btn" data-close-drawer aria-label="Close">
+                  <i class="fas fa-times"></i>
+                </button>
+                <h2>Member</h2>
+              </header>
+              <div class="app-content">
+                <div class="form-card">
+                  <h3><i class="fas fa-user"></i> Profile</h3>
+                  <div class="player-details-section">
+                    <div class="player-detail-row">
+                      <div class="player-detail-label">Name</div>
+                      <div class="player-detail-value" id="md-name"></div>
+                    </div>
+                    <div class="player-detail-row">
+                      <div class="player-detail-label">Citizen ID</div>
+                      <div class="player-detail-value" id="md-cid"></div>
+                    </div>
+                    <div class="player-detail-row">
+                      <div class="player-detail-label">Rank</div>
+                      <div class="player-detail-value" id="md-rank"></div>
+                    </div>
+                    <div class="player-detail-row">
+                      <div class="player-detail-label">Status</div>
+                      <div class="player-detail-value" id="md-status"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-card mt">
+                  <h3><i class="fas fa-cog"></i> Actions</h3>
+                  <div class="quick-actions-bar">
+                    <div class="quick-action-btn" data-action="promote">
+                      <i class="fas fa-arrow-up"></i><span>Promote</span>
+                    </div>
+                    <div class="quick-action-btn" data-action="demote">
+                      <i class="fas fa-arrow-down"></i><span>Demote</span>
+                    </div>
+                    <div class="quick-action-btn" data-action="kick">
+                      <i class="fas fa-user-times"></i><span>Kick</span>
+                    </div>
+                    <div class="quick-action-btn" data-action="leader">
+                      <i class="fas fa-crown"></i><span>Transfer Lead</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <!-- BUSINESSES -->
+<section id="businesses-screen" class="screen" role="region" aria-label="Fronts">
+  <div class="app-header">
+    <button class="back-btn" data-back aria-label="Back to Home">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <h2><i class="fas fa-store"></i> Fronts</h2>
+    <div class="app-header-right">
+      <button class="back-btn" title="Refresh" id="btn-refresh-businesses" aria-label="Refresh Fronts">
+        <i class="fas fa-sync-alt"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="app-content">
+    <div class="search-bar-container">
+      <i class="fas fa-search"></i>
+      <input class="tablet-input tablet-search" id="business-search" placeholder="Search fronts..." />
+    </div>
+
+    <div class="players-list-tablet" id="business-list"></div>
+
+    <div class="form-card mt">
+      <h3><i class="fas fa-info-circle"></i> How it works</h3>
+      <div class="player-details-section">
+        <div class="player-detail-row">
+          <div class="player-detail-label">Assign</div>
+          <div class="player-detail-value">Admins assign fronts to gangs. You’ll see them listed above.</div>
+        </div>
+        <div class="player-detail-row">
+          <div class="player-detail-label">Deposit</div>
+          <div class="player-detail-value">Deposit marked bills to the front’s laundering pool.</div>
+        </div>
+        <div class="player-detail-row">
+          <div class="player-detail-label">Catalog</div>
+          <div class="player-detail-value">Manage illegal items, price and stock per front.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+        <!-- VEHICLES -->
+        <section id="vehicles-screen" class="screen" role="region" aria-label="Vehicles">
+          <div class="app-header">
+            <button class="back-btn" data-back aria-label="Back to Home">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2><i class="fas fa-car"></i> Vehicles</h2>
+            <div class="app-header-right">
+              <button class="back-btn" title="Refresh" id="btn-refresh-vehicles" aria-label="Refresh Vehicles">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="app-content">
+            <div class="search-bar-container">
+              <i class="fas fa-search"></i>
+              <input class="tablet-input tablet-search" id="vehicle-search" placeholder="Search plates/models..." />
+            </div>
+
+            <div class="players-list-tablet" id="vehicle-list"></div>
+
+            <div class="form-card mt">
+              <h3><i class="fas fa-plus-circle"></i> Register</h3>
+              <button class="submit-btn" data-action="register-vehicle">
+                <i class="fas fa-car"></i> Register Current Vehicle
+              </button>
+            </div>
+          </div>
+
+          <!-- Vehicle Drawer -->
+          <aside id="vehicle-drawer" class="drawer hidden" aria-hidden="true">
+            <div class="drawer-content">
+              <header class="app-header">
+                <button class="back-btn" data-close-drawer aria-label="Close">
+                  <i class="fas fa-times"></i>
+                </button>
+                <h2>Vehicle</h2>
+              </header>
+              <div class="app-content">
+                <div class="form-card">
+                  <h3><i class="fas fa-car"></i> Overview</h3>
+                  <div class="player-details-section">
+                    <div class="player-detail-row">
+                      <div class="player-detail-label">Plate</div>
+                      <div class="player-detail-value" id="vd-plate"></div>
+                    </div>
+                    <div class="player-detail-row">
+                      <div class="player-detail-label">Model</div>
+                      <div class="player-detail-value" id="vd-model"></div>
+                    </div>
+                    <div class="player-detail-row">
+                      <div class="player-detail-label">Status</div>
+                      <div class="player-detail-value" id="vd-status"></div>
+                    </div>
+                    <div class="player-detail-row">
+                      <div class="player-detail-label">Last Seen</div>
+                      <div class="player-detail-value" id="vd-lastseen"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-card mt">
+                  <h3><i class="fas fa-tools"></i> Actions</h3>
+                  <div class="quick-actions-bar">
+                    <div class="quick-action-btn" data-action="spawn">
+                      <i class="fas fa-car"></i><span>Spawn</span>
+                    </div>
+                    <div class="quick-action-btn" data-action="track">
+                      <i class="fas fa-location-arrow"></i><span>Track</span>
+                    </div>
+                    <div class="quick-action-btn" data-action="view">
+                      <i class="fas fa-map-marker-alt"></i><span>Waypoint</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <!-- DRUGS -->
+        <section id="drugs-screen" class="screen" role="region" aria-label="Labs and Fields">
+          <div class="app-header">
+            <button class="back-btn" data-back aria-label="Back to Home">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2><i class="fas fa-flask"></i> Labs & Fields</h2>
+            <div class="app-header-right">
+              <button class="back-btn" title="Refresh" id="btn-refresh-drugs" aria-label="Refresh Labs & Fields">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="app-content">
+            <!-- Labs list -->
+            <div class="form-card">
+              <h3><i class="fas fa-industry"></i> Labs</h3>
+              <div class="players-list-tablet" id="lab-list"></div>
+            </div>
+
+            <!-- Fields list -->
+            <div class="form-card mt">
+              <h3><i class="fas fa-seedling"></i> Fields</h3>
+              <div class="players-list-tablet" id="field-list"></div>
+            </div>
+
+            <!-- Create new -->
+            <div class="form-card mt">
+              <h3><i class="fas fa-plus-circle"></i> Create New</h3>
+              <div class="grid two">
+                <input class="tablet-input" id="create-field-type" placeholder="resourceType (e.g. coca_leaf)" />
+                <input class="tablet-input" id="create-field-terr" placeholder="territoryName" />
+              </div>
+              <button class="submit-btn mt" data-action="create-field">
+                <i class="fas fa-seedling"></i> Create Field
+              </button>
+
+              <div class="grid two mt">
+                <input class="tablet-input" id="create-lab-type" placeholder="drugType (e.g. meth)" />
+                <input class="tablet-input" id="create-lab-terr" placeholder="territoryName" />
+              </div>
+              <button class="submit-btn mt" data-action="create-lab">
+                <i class="fas fa-industry"></i> Create Lab
+              </button>
+            </div>
+          </div>
+
+          <!-- Lab Drawer -->
+          <aside id="lab-drawer" class="drawer hidden" aria-hidden="true">
+            <div class="drawer-content">
+              <header class="app-header">
+                <button class="back-btn" data-close-drawer aria-label="Close">
+                  <i class="fas fa-times"></i>
+                </button>
+                <h2>Lab</h2>
+              </header>
+              <div class="app-content">
+                <div class="form-card">
+                  <h3><i class="fas fa-industry"></i> Overview</h3>
+                  <div class="player-details-section">
+                    <div class="player-detail-row">
+                      <div class="player-detail-label">Type</div>
+                      <div class="player-detail-value" id="ld-type"></div>
+                    </div>
+                    <div class="player-detail-row">
+                      <div class="player-detail-label">Level</div>
+                      <div class="player-detail-value" id="ld-level"></div>
+                    </div>
+                    <div class="player-detail-row">
+                      <div class="player-detail-label">Capacity</div>
+                      <div class="player-detail-value" id="ld-capacity"></div>
+                    </div>
+                    <div class="player-detail-row">
+                      <div class="player-detail-label">Security</div>
+                      <div class="player-detail-value" id="ld-security"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-card mt">
+                  <h3><i class="fas fa-box"></i> Inventory</h3>
+                  <div id="ld-inventory" class="players-list-tablet"></div>
+                  <div class="grid two mt">
+                    <input class="tablet-input" id="ld-deposit-item" placeholder="item name" />
+                    <input class="tablet-input" id="ld-deposit-amt" type="number" placeholder="amount" />
+                  </div>
+                  <button class="submit-btn mt" data-action="deposit-item">
+                    <i class="fas fa-plus-circle"></i> Deposit
+                  </button>
+                </div>
+
+                <div class="form-card mt">
+                  <h3><i class="fas fa-flask"></i> Process</h3>
+                  <button class="submit-btn" data-action="process">
+                    <i class="fas fa-play"></i> Start Processing
+                  </button>
+                </div>
+
+                <div class="form-card mt">
+                  <h3><i class="fas fa-tools"></i> Upgrades</h3>
+                  <div class="quick-actions-bar">
+                    <div class="quick-action-btn" data-action="upgrade" data-upgrade="capacity">
+                      <i class="fas fa-plus-circle"></i><span>Capacity</span>
+                    </div>
+                    <div class="quick-action-btn" data-action="upgrade" data-upgrade="security">
+                      <i class="fas fa-shield-alt"></i><span>Security</span>
+                    </div>
+                    <div class="quick-action-btn" data-action="upgrade" data-upgrade="level">
+                      <i class="fas fa-level-up-alt"></i><span>Level</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <!-- HEISTS -->
+        <section id="heists-screen" class="screen" role="region" aria-label="Heists">
+          <div class="app-header">
+            <button class="back-btn" data-back aria-label="Back to Home">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2><i class="fas fa-user-secret"></i> Heists</h2>
+            <div class="app-header-right">
+              <button class="back-btn" title="Refresh" id="btn-refresh-heists" aria-label="Refresh Heists">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="app-content">
+            <div class="form-card">
+              <h3><i class="fas fa-user-secret"></i> Active Heists</h3>
+              <div class="players-list-tablet" id="heist-list"></div>
+            </div>
+
+            <div class="form-card mt">
+              <h3><i class="fas fa-plus-circle"></i> Start Heist</h3>
+              <div class="grid two">
+                <input class="tablet-input" id="heist-type" placeholder="heistType (e.g. convenience_store)" />
+                <input class="tablet-input" id="heist-location" type="number" min="1" value="1" />
+              </div>
+              <button class="submit-btn mt" data-action="start-heist">
+                <i class="fas fa-play"></i> Start
+              </button>
+            </div>
+          </div>
+
+          <!-- Heist Drawer -->
+          <aside id="heist-drawer" class="drawer hidden" aria-hidden="true">
+            <div class="drawer-content">
+              <header class="app-header">
+                <button class="back-btn" data-close-drawer aria-label="Close">
+                  <i class="fas fa-times"></i>
+                </button>
+                <h2>Heist</h2>
+              </header>
+              <div class="app-content">
+                <div class="form-card">
+                  <h3><i class="fas fa-user-secret"></i> Overview</h3>
+                  <div class="player-details-section">
+                    <div class="player-detail-row">
+                      <div class="player-detail-label">Type</div>
+                      <div class="player-detail-value" id="hd-type"></div>
+                    </div>
+                    <div class="player-detail-row">
+                      <div class="player-detail-label">Stage</div>
+                      <div class="player-detail-value" id="hd-stage"></div>
+                    </div>
+                    <div class="player-detail-row">
+                      <div class="player-detail-label">Started</div>
+                      <div class="player-detail-value" id="hd-start"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-card mt">
+                  <h3><i class="fas fa-tools"></i> Actions</h3>
+                  <div class="quick-actions-bar">
+                    <div class="quick-action-btn" data-action="start-mission">
+                      <i class="fas fa-play"></i><span>Start Stage</span>
+                    </div>
+                    <div class="quick-action-btn" data-action="join">
+                      <i class="fas fa-user-plus"></i><span>Join</span>
+                    </div>
+                    <div class="quick-action-btn" data-action="cancel">
+                      <i class="fas fa-times"></i><span>Cancel</span>
+                    </div>
+                    <div class="quick-action-btn" data-action="view">
+                      <i class="fas fa-map-marker-alt"></i><span>Waypoint</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <!-- WARS -->
+        <section id="wars-screen" class="screen" role="region" aria-label="Wars">
+          <div class="app-header">
+            <button class="back-btn" data-back aria-label="Back to Home">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2><i class="fas fa-crosshairs"></i> Wars</h2>
+            <div class="app-header-right">
+              <button class="back-btn" title="Refresh" id="btn-refresh-wars" aria-label="Refresh Wars">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="app-content">
+            <div class="form-card">
+              <h3><i class="fas fa-crosshairs"></i> Active Wars</h3>
+              <div class="players-list-tablet" id="war-list"></div>
+            </div>
+
+            <div class="form-card mt">
+              <h3><i class="fas fa-plus-circle"></i> Declare War</h3>
+              <div class="grid two">
+                <input class="tablet-input" id="war-target-gid" type="number" placeholder="targetGangId" />
+                <input class="tablet-input" id="war-territory-name" type="text" placeholder="territoryName" />
+              </div>
+              <button class="submit-btn mt" data-action="declare-war">
+                <i class="fas fa-crosshairs"></i> Declare
+              </button>
+            </div>
+          </div>
+
+          <!-- War Drawer -->
+          <aside id="war-drawer" class="drawer hidden" aria-hidden="true">
+            <div class="drawer-content">
+              <header class="app-header">
+                <button class="back-btn" data-close-drawer aria-label="Close">
+                  <i class="fas fa-times"></i>
+                </button>
+                <h2>War</h2>
+              </header>
+              <div class="app-content">
+                <div class="form-card">
+                  <h3><i class="fas fa-crosshairs"></i> Overview</h3>
+                  <div class="player-details-section">
+                    <div class="player-detail-row">
+                      <div class="player-detail-label">Attacker</div>
+                      <div class="player-detail-value" id="wd-attacker"></div>
+                    </div>
+                    <div class="player-detail-row">
+                      <div class="player-detail-label">Defender</div>
+                      <div class="player-detail-value" id="wd-defender"></div>
+                    </div>
+                    <div class="player-detail-row">
+                      <div class="player-detail-label">Territory</div>
+                      <div class="player-detail-value" id="wd-territory"></div>
+                    </div>
+                    <div class="player-detail-row">
+                      <div class="player-detail-label">Score</div>
+                      <div class="player-detail-value" id="wd-score"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-card mt">
+                  <h3><i class="fas fa-tools"></i> Actions</h3>
+                  <div class="quick-actions-bar">
+                    <div class="quick-action-btn" data-action="view">
+                      <i class="fas fa-map-marker-alt"></i><span>Waypoint</span>
+                    </div>
+                    <div class="quick-action-btn" data-action="surrender">
+                      <i class="fas fa-flag"></i><span>Surrender</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <!-- SETTINGS -->
+        <section id="settings-screen" class="screen" role="region" aria-label="Settings">
+          <div class="app-header">
+            <button class="back-btn" data-back aria-label="Back to Home">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2><i class="fas fa-cog"></i> Settings</h2>
+          </div>
+
+          <div class="app-content" id="settings-content">
+            <div class="form-card">
+              <h3><i class="fas fa-cog"></i> Gang Settings</h3>
+              <div class="grid two">
+                <div>
+                  <label>Name</label>
+                  <input class="tablet-input" id="set-name" value="" />
+                </div>
+                <div>
+                  <label>Tag</label>
+                  <input class="tablet-input" id="set-tag" value="" />
+                </div>
+                <div>
+                  <label>Color</label>
+                  <input class="tablet-input" id="set-color" type="color" value="#ff3e3e" />
+                </div>
+                <div>
+                  <label>Logo URL</label>
+                  <input class="tablet-input" id="set-logo" value="" />
+                </div>
+              </div>
+
+              <div class="quick-actions-bar mt">
+                <div class="quick-action-btn" data-action="save-name">
+                  <i class="fas fa-save"></i><span>Save Name</span>
+                </div>
+                <div class="quick-action-btn" data-action="save-tag">
+                  <i class="fas fa-save"></i><span>Save Tag</span>
+                </div>
+                <div class="quick-action-btn" data-action="save-color">
+                  <i class="fas fa-palette"></i><span>Save Color</span>
+                </div>
+                <div class="quick-action-btn" data-action="save-logo">
+                  <i class="fas fa-image"></i><span>Save Logo</span>
+                </div>
+              </div>
+
+              <div class="quick-actions-bar mt">
+                <button class="submit-btn danger" data-action="leave-gang">
+                  <i class="fas fa-sign-out-alt"></i> Leave Gang
+                </button>
+                <button class="submit-btn danger" data-action="disband-gang">
+                  <i class="fas fa-trash"></i> Disband
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ADMIN -->
+        <section id="admin-screen" class="screen" role="region" aria-label="Admin">
+          <div class="app-header">
+            <button class="back-btn" data-back aria-label="Back to Home">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2><i class="fas fa-user-shield"></i> Admin</h2>
+            <div class="app-header-right">
+              <button class="back-btn" title="Refresh" id="btn-refresh-admin" aria-label="Refresh Admin Data">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="app-content">
+            <div class="category-tabs-tablet" role="tablist" aria-label="Admin tabs">
+              <button class="category-tab-tablet active" data-adtab="gangs" role="tab" aria-selected="true">
+                <i class="fas fa-shield-alt"></i> Gangs
+              </button>
+              <button class="category-tab-tablet" data-adtab="players" role="tab" aria-selected="false">
+                <i class="fas fa-users"></i> Players
+              </button>
+              <button class="category-tab-tablet" data-adtab="territories" role="tab" aria-selected="false">
+                <i class="fas fa-map"></i> Territories
+              </button>
+              <button class="category-tab-tablet" data-adtab="logs" role="tab" aria-selected="false">
+                <i class="fas fa-clipboard-list"></i> Logs
+              </button>
+            </div>
+
+            <div id="admin-content" role="tabpanel">
+              <!-- Gangs -->
+              <div id="admin-tab-gangs">
+                <div class="form-card">
+                  <h3><i class="fas fa-shield-alt"></i> Gangs</h3>
+                  <div class="search-bar-container">
+                    <i class="fas fa-search"></i>
+                    <input class="tablet-input tablet-search" id="ad-gangs-search" placeholder="Search gangs..." />
+                  </div>
+                  <div id="admin-gangs-list" class="players-list-tablet"></div>
+                </div>
+
+  <div class="form-card mt">
+  <h3><i class="fas fa-plus-circle"></i> Create Gang</h3>
+  <div class="grid four">
+    <input class="tablet-input" id="ad-create-name" placeholder="Name" />
+    <input class="tablet-input" id="ad-create-tag" placeholder="TAG" />
+    <input class="tablet-input" id="ad-create-color" type="color" value="#ff3e3e" />
+    <input class="tablet-input" id="ad-create-max" type="number" min="5" max="50" value="25" />
+  </div>
+  <div class="grid one mt">
+    <input class="tablet-input" id="ad-create-sharedmax" type="number" min="0" max="10" value="0" placeholder="Shared Stash Limit (0 = unlimited)" />
+  </div>
+  <!-- ADD THIS BLOCK -->
+  <div class="grid four mt">
+    <input class="tablet-input" id="ad-create-main-slots" type="number" min="10" max="200" value="50" placeholder="Main Stash Slots" />
+    <input class="tablet-input" id="ad-create-main-weight" type="number" min="10" max="1000" value="100" placeholder="Main Stash Weight (kg)" />
+    <input class="tablet-input" id="ad-create-shared-slots" type="number" min="10" max="200" value="50" placeholder="Shared Stash Slots" />
+    <input class="tablet-input" id="ad-create-shared-weight" type="number" min="10" max="1000" value="100" placeholder="Shared Stash Weight (kg)" />
+  </div>
+  <button class="submit-btn mt" data-action="admin-create-gang">
+    <i class="fas fa-plus-circle"></i> Create
+  </button>
+</div>              </div>
+
+              <!-- Players -->
+              <div id="admin-tab-players" class="hidden">
+                <div class="form-card">
+                  <h3><i class="fas fa-users"></i> Players</h3>
+                  <div class="search-bar-container">
+                    <i class="fas fa-search"></i>
+                    <input class="tablet-input tablet-search" id="ad-players-search" placeholder="Search players..." />
+                  </div>
+                  <div id="admin-players-list" class="players-list-tablet"></div>
+                </div>
+              </div>
+
+              <!-- Territories -->
+              <div id="admin-tab-territories" class="hidden">
+                <div class="form-card">
+                  <h3><i class="fas fa-map"></i> Territories</h3>
+                  <div class="search-bar-container">
+                    <i class="fas fa-search"></i>
+                    <input class="tablet-input tablet-search" id="ad-territories-search" placeholder="Search territories..." />
+                  </div>
+                  <div id="admin-territories-list" class="players-list-tablet"></div>
+                </div>
+
+                <div class="form-card mt">
+                  <h3><i class="fas fa-flag"></i> Set Owner</h3>
+                  <div class="grid three">
+                    <input class="tablet-input" id="ad-set-territory" placeholder="Territory name" />
+                    <input class="tablet-input" id="ad-set-gangid" type="number" placeholder="gangId (0 to unclaim)" />
+                    <button class="submit-btn" data-action="admin-set-owner">
+                      <i class="fas fa-save"></i> Save
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Logs -->
+              <div id="admin-tab-logs" class="hidden">
+                <div class="form-card">
+                  <h3><i class="fas fa-clipboard-list"></i> Logs</h3>
+                  <div id="admin-logs-list" class="players-list-tablet"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notifications -->
+  <div id="notifications-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Shared Modal Overlay container -->
+  <div id="modal-root"></div>
+
+  <!-- Templates -->
+  <template id="tpl-transaction-row">
+    <div class="player-card-tablet">
+      <div class="player-info-tablet">
+        <div class="player-name-tablet">{Timestamp}</div>
+        <div class="player-details-tablet">
+          <span>{Description}</span>
+          <span>{Amount}</span>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-member-row">
+    <div class="player-card-tablet" data-cid="{CitizenId}">
+      <div class="player-avatar-tablet">{Avatar}</div>
+      <div class="player-info-tablet">
+        <div class="player-name-tablet">{Name}
+          <span class="ac-status {OnlineClass}">{OnlineText}</span>
+        </div>
+        <div class="player-details-tablet">
+          <span>Rank: {Rank}</span>
+          <span>Joined: {Joined}</span>
+        </div>
+      </div>
+      <div class="player-ping-tablet">
+        <button class="quick-action-btn" data-action="promote" data-cid="{CitizenId}">
+          <i class="fas fa-arrow-up"></i><span>Promote</span>
+        </button>
+        <button class="quick-action-btn" data-action="demote" data-cid="{CitizenId}">
+          <i class="fas fa-arrow-down"></i><span>Demote</span>
+        </button>
+        <button class="quick-action-btn" data-action="kick" data-cid="{CitizenId}">
+          <i class="fas fa-user-times"></i><span>Kick</span>
+        </button>
+        <button class="quick-action-btn" data-action="leader" data-cid="{CitizenId}">
+          <i class="fas fa-crown"></i><span>Leader</span>
+        </button>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-territory-row">
+    <div class="player-card-tablet" data-name="{Name}">
+      <div class="player-info-tablet">
+        <div class="player-name-tablet">{Label}
+          <span class="ac-status {OwnedClass}">{OwnerText}</span>
+        </div>
+        <div class="player-details-tablet">
+          <span>Status: {Status}</span>
+          <span>Income: {Income}</span>
+        </div>
+      </div>
+      <div class="player-ping-tablet">
+        <button class="quick-action-btn" data-action="capture" data-name="{Name}">
+          <i class="fas fa-flag"></i><span>Capture</span>
+        </button>
+        <button class="quick-action-btn" data-action="defend" data-name="{Name}">
+          <i class="fas fa-shield-alt"></i><span>Defend</span>
+        </button>
+        <button class="quick-action-btn" data-action="view" data-name="{Name}">
+          <i class="fas fa-map-marker-alt"></i><span>View</span>
+        </button>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-business-row">
+    <div class="player-card-tablet" data-id="{Id}">
+      <div class="player-info-tablet">
+        <div class="player-name-tablet">{Type}</div>
+        <div class="player-details-tablet">
+          <span>Level: {Level}</span>
+          <span>Income/hr: {Income}</span>
+          <span>Stored: {Stored}</span>
+        </div>
+      </div>
+      <div class="player-ping-tablet">
+        <button class="quick-action-btn" data-action="collect" data-id="{Id}">
+          <i class="fas fa-dollar-sign"></i><span>Collect</span>
+        </button>
+        <button class="quick-action-btn" data-action="upgrade" data-id="{Id}">
+          <i class="fas fa-level-up-alt"></i><span>Upgrade</span>
+        </button>
+        <button class="quick-action-btn" data-action="view" data-id="{Id}">
+          <i class="fas fa-map-marker-alt"></i><span>View</span>
+        </button>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-vehicle-row">
+    <div class="player-card-tablet" data-plate="{Plate}">
+      <div class="player-info-tablet">
+        <div class="player-name-tablet">{Plate}</div>
+        <div class="player-details-tablet">
+          <span>Model: {Model}</span>
+          <span>Status: {Status}</span>
+        </div>
+      </div>
+      <div class="player-ping-tablet">{Actions}</div>
+    </div>
+  </template>
+
+  <template id="tpl-lab-row">
+    <div class="player-card-tablet" data-id="{Id}">
+      <div class="player-info-tablet">
+        <div class="player-name-tablet">{DrugType}</div>
+        <div class="player-details-tablet">
+          <span>Level: {Level}</span>
+          <span>Capacity: {Capacity}</span>
+        </div>
+      </div>
+      <div class="player-ping-tablet">
+        <button class="quick-action-btn" data-action="process" data-id="{Id}">
+          <i class="fas fa-flask"></i><span>Process</span>
+        </button>
+        <button class="quick-action-btn" data-action="upgrade" data-type="capacity" data-id="{Id}">
+          <i class="fas fa-plus-circle"></i><span>Capacity</span>
+        </button>
+        <button class="quick-action-btn" data-action="upgrade" data-type="security" data-id="{Id}">
+          <i class="fas fa-shield-alt"></i><span>Security</span>
+        </button>
+        <button class="quick-action-btn" data-action="upgrade" data-type="level" data-id="{Id}">
+          <i class="fas fa-level-up-alt"></i><span>Level</span>
+        </button>
+        <button class="quick-action-btn" data-action="view" data-id="{Id}">
+          <i class="fas fa-map-marker-alt"></i><span>View</span>
+        </button>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-field-row">
+    <div class="player-card-tablet" data-id="{Id}">
+      <div class="player-info-tablet">
+        <div class="player-name-tablet">{ResourceType}</div>
+        <div class="player-details-tablet">
+          <span>Growth: {Growth}/10</span>
+        </div>
+      </div>
+      <div class="player-ping-tablet">
+        <button class="quick-action-btn" data-action="harvest" data-id="{Id}">
+          <i class="fas fa-cut"></i><span>Harvest</span>
+        </button>
+        <button class="quick-action-btn" data-action="view" data-id="{Id}">
+          <i class="fas fa-map-marker-alt"></i><span>View</span>
+        </button>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-heist-row">
+    <div class="player-card-tablet" data-id="{Id}">
+      <div class="player-info-tablet">
+        <div class="player-name-tablet">{HeistType}</div>
+        <div class="player-details-tablet"><span>Stage: {Stage}</span></div>
+      </div>
+      <div class="player-ping-tablet">
+        <button class="quick-action-btn" data-action="start-mission" data-id="{Id}">
+          <i class="fas fa-play"></i><span>Start</span>
+        </button>
+        <button class="quick-action-btn" data-action="join" data-id="{Id}">
+          <i class="fas fa-user-plus"></i><span>Join</span>
+        </button>
+        <button class="quick-action-btn" data-action="cancel" data-id="{Id}">
+          <i class="fas fa-times"></i><span>Cancel</span>
+        </button>
+      </div>
+    </div>
+  </template>
+
+  <!-- Shared Stash Row: no open/teleport; includes Location -->
+  <template id="tpl-shared-stash-row">
+    <div class="player-card-tablet" data-stash-id="{Id}">
+      <div class="player-info-tablet">
+        <div class="player-name-tablet">{Name}</div>
+        <div class="player-details-tablet">
+          <span>Slots: {Slots}</span>
+          <span>Weight: {Weight} kg</span>
+          <span>Min Rank: {MinRank}</span>
+          <span>Location: {Location}</span>
+        </div>
+      </div>
+      <div class="player-ping-tablet">
+        <button class="quick-action-btn" data-action="delete-shared" data-stash-id="{Id}">
+          <i class="fas fa-trash"></i><span>Delete</span>
+        </button>
+      </div>
+    </div>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>

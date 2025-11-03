@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gang Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Pre-Vue Loader -->
+    <div id="pre-vue-loader">
+        <div class="pre-loader-content">
+            <div class="pre-loader-spinner"></div>
+            <p>Loading Gang Management System...</p>
+        </div>
+    </div>
+
+    <div id="app">
+        <!-- Tablet Device Frame -->
+        <div class="tablet-device" :class="{ visible: isVisible }">
+            <div class="tablet-camera"></div>
+            <div class="tablet-power-button"></div>
+            <div class="tablet-volume-up"></div>
+            <div class="tablet-volume-down"></div>
+            
+            <div class="tablet-screen">
+                <div class="tablet-status-bar">
+                    <div class="status-time">{{ currentTime }}</div>
+                    <div class="status-icons">
+                        <i class="fas fa-wifi"></i>
+                        <i class="fas fa-battery-three-quarters"></i>
+                    </div>
+                </div>
+                
+                <div class="app-container">
+                    <!-- App Header -->
+<div class="app-header-minimal">
+    <div class="app-title-minimal">
+        <h1>{{ gangData.name || 'Gang Management' }}</h1>
+        <span>{{ gangData.tag ? `[${gangData.tag}]` : 'Control Panel' }}</span>
+    </div>
+    <div class="app-actions">
+        <button v-if="isAdmin" @click="openAdminPanel" class="btn btn-secondary btn-sm">
+            <i class="fas fa-shield-alt"></i> Admin Panel
+        </button>
+        <button @click="refreshData" class="btn btn-secondary btn-sm">
+            <i class="fas fa-sync-alt"></i> Refresh
+        </button>
+        <button @click="closeTablet" class="btn btn-danger btn-sm">
+            <i class="fas fa-times"></i> Close
+        </button>
+    </div>
+</div>                    
+                    <!-- App Content -->
+                    <div class="app-content">
+                        <!-- Sidebar Navigation -->
+                        <div class="app-sidebar">
+                            <div class="nav-item" :class="{ active: activeTab === 'dashboard' }" @click="setActiveTab('dashboard')">
+                                <i class="fas fa-home"></i>
+                                <span>Home</span>
+                            </div>
+                            <div class="nav-item" :class="{ active: activeTab === 'members' }" @click="setActiveTab('members')">
+                                <i class="fas fa-users"></i>
+                                <span>Members</span>
+                            </div>
+                            <div class="nav-item" :class="{ active: activeTab === 'territories' }" @click="setActiveTab('territories')">
+                                <i class="fas fa-map-marked-alt"></i>
+                                <span>Territories</span>
+                            </div>
+                            <div class="nav-item" :class="{ active: activeTab === 'bank' }" @click="setActiveTab('bank')">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <span>Bank</span>
+                            </div>
+                            <div class="nav-item" :class="{ active: activeTab === 'businesses' }" @click="setActiveTab('businesses')">
+                                <i class="fas fa-store"></i>
+                                <span>Business</span>
+                            </div>
+                            <div class="nav-item" :class="{ active: activeTab === 'drugs' }" @click="setActiveTab('drugs')">
+                                <i class="fas fa-cannabis"></i>
+                                <span>Drugs</span>
+                            </div>
+                            <div class="nav-item" :class="{ active: activeTab === 'vehicles' }" @click="setActiveTab('vehicles')">
+                                <i class="fas fa-car"></i>
+                                <span>Vehicles</span>
+                            </div>
+                            <div class="nav-item" :class="{ active: activeTab === 'heists' }" @click="setActiveTab('heists')">
+                                <i class="fas fa-mask"></i>
+                                <span>Heists</span>
+                            </div>
+                            <div class="nav-item" :class="{ active: activeTab === 'wars' }" @click="setActiveTab('wars')">
+                                <i class="fas fa-crosshairs"></i>
+                                <span>Wars</span>
+                            </div>
+                            <div class="sidebar-spacer"></div>
+                            <div class="nav-item" :class="{ active: activeTab === 'settings' }" @click="setActiveTab('settings')">
+                                <i class="fas fa-cog"></i>
+                                <span>Settings</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Main Content Area -->
+                        <div class="main-content">
+                            <!-- Dashboard Tab -->
+                            <div v-if="activeTab === 'dashboard'">
+                                <div class="content-header">
+                                    <h2><i class="fas fa-home"></i> Dashboard</h2>
+                                </div>
+                                
+                                <!-- Stats Grid -->
+                                <div class="stats-grid">
+                                    <div class="stat-card">
+                                        <div class="stat-icon members">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                        <div>
+                                            <div class="stat-value">{{ memberCount }}/{{ gangData.maxMembers || 25 }}</div>
+                                            <div class="stat-label">Members</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="stat-card">
+                                        <div class="stat-icon bank">
+                                            <i class="fas fa-money-bill-wave"></i>
+                                        </div>
+                                        <div>
+                                            <div class="stat-value">£{{ formatMoney(gangData.bank || gangData.money || 0) }}</div>
+                                            <div class="stat-label">Gang Bank</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="stat-card">
+                                        <div class="stat-icon territories">
+                                            <i class="fas fa-map-marked-alt"></i>
+                                        </div>
+                                        <div>
+                                            <div class="stat-value">{{ controlledTerritories }}</div>
+                                            <div class="stat-label">Territories</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="stat-card">
+                                        <div class="stat-icon reputation">
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                        <div>
+                                            <div class="stat-value">{{ gangData.reputation || 0 }}</div>
+                                            <div class="stat-label">Reputation</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Dashboard Grid -->
+                                <div class="dashboard-grid">
+                                    <!-- Recent Activities -->
+                                    <div class="content-section">
+                                        <div class="section-header">
+                                            <div class="section-title">
+                                                <i class="fas fa-history"></i> Recent Activities
+                                            </div>
+                                        </div>
+                                        <div class="activity-feed">
+                                            <div v-if="recentActivities.length === 0" class="empty-state">
+                                                <i class="fas fa-history"></i>
+                                                <p>No recent activities</p>
+                                            </div>
+                                            <div v-for="activity in recentActivities" :key="activity.id" class="activity-item">
+                                                <div class="activity-icon">
+                                                    <i :class="getActivityIcon(activity.type)"></i>
+                                                </div>
+                                                <div class="activity-content">
+                                                    <div class="activity-message">{{ activity.description }}</div>
+                                                    <div class="activity-time">{{ activity.time }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Territory Status -->
+                                    <div class="content-section">
+                                        <div class="section-header">
+                                            <div class="section-title">
+                                                <i class="fas fa-map-marked-alt"></i> Territory Status
+                                            </div>
+                                        </div>
+                                        <div class="activity-feed">
+                                            <div v-if="territories.length === 0" class="empty-state">
+                                                <i class="fas fa-map-marked-alt"></i>
+                                                <p>No territories controlled</p>
+                                            </div>
+                                            <div v-for="territory in territories.slice(0, 5)" :key="territory.name" class="activity-item">
+                                                <div class="activity-icon">
+                                                    <div class="territory-chip" :style="{backgroundColor: territory.colorHex}"></div>
+                                                </div>
+                                                <div class="activity-content">
+                                                    <div class="activity-message">
+                                                        {{ territory.name }}
+                                                        <span v-if="territory.contested" class="text-warning">(Contested)</span>
+                                                    </div>
+                                                    <div class="activity-time">Income: £{{ getHourlyIncome(territory) }}/hr</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Members Tab -->
+                            <div v-if="activeTab === 'members'">
+                                <div class="content-header">
+                                    <h2><i class="fas fa-users"></i> Gang Members</h2>
+                                    <div class="header-actions">
+                                        <button v-if="hasPermission('inviteMembers')" @click="showInviteModal = true" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-user-plus"></i> Invite Member
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="filter-bar">
+                                    <div class="search-box">
+                                        <i class="fas fa-search"></i>
+                                        <input type="text" v-model="memberSearch" placeholder="Search members...">
+                                    </div>
+                                    <div class="filter-actions">
+                                        <select v-model="memberFilter" class="filter-select">
+                                            <option value="all">All Members</option>
+                                            <option value="online">Online</option>
+                                            <option value="offline">Offline</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="members-grid">
+                                    <div v-if="filteredMembers.length === 0" class="empty-state">
+                                        <i class="fas fa-users"></i>
+                                        <p>No members found</p>
+                                    </div>
+                                    <div v-for="member in filteredMembers" :key="member.citizenId" class="member-card">
+                                        <div class="member-header">
+                                            <div class="member-avatar">
+                                                <i class="fas fa-user"></i>
+                                                <div class="member-status" :class="member.isOnline ? 'online' : 'offline'"></div>
+                                            </div>
+                                            <div class="member-info">
+                                                <h3>{{ member.name }}</h3>
+                                                <div class="member-rank">{{ getRankName(member.rank) }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="member-stats">
+                                            <div class="member-stat">
+                                                <div class="label">Rank</div>
+                                                <div class="value">{{ member.rank }}/6</div>
+                                            </div>
+                                            <div class="member-stat">
+                                                <div class="label">Joined</div>
+                                                <div class="value">{{ formatDate(member.joinedAt) }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="member-actions">
+                                            <button v-if="hasPermission('manageRanks') && canManageMember(member)" @click="promoteMember(member)" class="btn btn-sm btn-secondary">
+                                                <i class="fas fa-arrow-up"></i>
+                                            </button>
+                                            <button v-if="hasPermission('manageRanks') && canManageMember(member)" @click="demoteMember(member)" class="btn btn-sm btn-secondary">
+                                                <i class="fas fa-arrow-down"></i>
+                                            </button>
+                                            <button v-if="hasPermission('kickMembers') && canManageMember(member)" @click="kickMember(member)" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-user-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Territories Tab -->
+                            <div v-if="activeTab === 'territories'">
+                                <div class="content-header">
+                                    <h2><i class="fas fa-map-marked-alt"></i> Territories</h2>
+                                </div>
+                                
+<!-- Interactive Territory Map -->
+<div class="territory-map-container">
+    <div id="territory-map" class="interactive-map">
+        <img src="images/map.png" alt="Los Santos Map" class="map-image">
+        <div v-for="territory in territories" :key="territory.name" 
+             class="territory-overlay" 
+             :class="{ 'owned': territory.gangId === gangData.id, 'contested': territory.contested, 'unclaimed': !territory.gangId }"
+             :style="getTerritoryStyling(territory)"
+             @click="viewTerritory(territory)">
+            <div class="territory-tooltip">
+                <div class="territory-tooltip-name">{{ territory.label || territory.name }}</div>
+                <div class="territory-tooltip-owner">{{ territory.gangName || 'Unclaimed' }}</div>
+                <div class="territory-tooltip-type">{{ getTerritoryCategoryName(territory.type) }}</div>
+                <div class="territory-tooltip-income">Income: £{{ getHourlyIncome(territory) }}/hr</div>
+            </div>
+        </div>
+    </div>
+</div>
+                                
+                                <div class="filter-bar">
+                                    <div class="search-box">
+                                        <i class="fas fa-search"></i>
+                                        <input type="text" v-model="territorySearch" placeholder="Search territories...">
+                                    </div>
+                                    <div class="filter-actions">
+                                        <select v-model="territoryFilter" class="filter-select">
+                                            <option value="all">All Territories</option>
+                                            <option value="owned">Owned</option>
+                                            <option value="contested">Contested</option>
+                                            <option value="unclaimed">Unclaimed</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="territories-grid">
+                                    <div v-if="filteredTerritories.length === 0" class="empty-state">
+                                        <i class="fas fa-map-marked-alt"></i>
+                                        <p>No territories found</p>
+                                    </div>
+                                    <div v-for="territory in filteredTerritories" :key="territory.name" class="territory-card">
+                                        <div class="territory-header" :style="{ background: territory.colorHex || 'var(--primary-gradient)' }">
+                                            <div class="territory-name">{{ territory.label || territory.name }}</div>
+                                            <div class="territory-owner">{{ territory.gangName }}</div>
+                                        </div>
+                                        <div class="territory-body">
+                                            <div class="territory-status" :class="getStatusClass(territory)">
+                                                {{ getStatusText(territory) }}
+                                            </div>
+                                            <div class="territory-stats">
+                                                <div class="territory-stat">
+                                                    <div class="label">Income</div>
+                                                    <div class="value">£{{ getHourlyIncome(territory) }}/hr</div>
+                                                </div>
+                                                <div class="territory-stat">
+                                                    <div class="label">Influence</div>
+                                                    <div class="value">{{ territory.influence || 0 }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="territory-actions">
+                                                <button v-if="canCapture(territory)" @click="captureTerritory(territory)" class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-flag"></i> Capture
+                                                </button>
+                                                <button v-if="canDefend(territory)" @click="defendTerritory(territory)" class="btn btn-sm btn-warning">
+                                                    <i class="fas fa-shield-alt"></i> Defend
+                                                </button>
+                                                <button v-if="canUpgrade(territory)" @click="showUpgradeModal(territory)" class="btn btn-sm btn-secondary">
+                                                    <i class="fas fa-arrow-up"></i> Upgrade
+                                                </button>
+                                                <button @click="viewTerritory(territory)" class="btn btn-sm btn-secondary">
+                                                    <i class="fas fa-eye"></i> View
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Bank Tab -->
+                            <div v-if="activeTab === 'bank'">
+                                <div class="content-header">
+                                    <h2><i class="fas fa-money-bill-wave"></i> Gang Bank</h2>
+                                </div>
+                                
+                                <div class="bank-card">
+                                    <div class="bank-card-content">
+                                        <div class="bank-card-chip"></div>
+                                        <div class="bank-card-number">£{{ formatMoney(gangData.bank || gangData.money || 0) }}</div>
+                                        <div class="bank-card-footer">
+                                            <div class="bank-card-name">{{ gangData.name || 'Gang Account' }}</div>
+                                            <div class="bank-card-logo"><i class="fas fa-university"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bank-actions">
+                                    <button @click="showDepositModal = true" class="btn btn-primary">
+                                        <i class="fas fa-arrow-down"></i> Deposit
+                                    </button>
+                                    <button v-if="hasPermission('manageBank')" @click="showWithdrawModal = true" class="btn btn-primary">
+                                        <i class="fas fa-arrow-up"></i> Withdraw
+                                    </button>
+                                    <button v-if="hasPermission('manageBank')" @click="showTransferModal = true" class="btn btn-primary">
+                                        <i class="fas fa-exchange-alt"></i> Transfer
+                                    </button>
+                                </div>
+                                
+                                <div class="content-section">
+                                    <div class="section-header">
+                                        <div class="section-title">
+                                            <i class="fas fa-history"></i> Transaction History
+                                        </div>
+                                    </div>
+                                    <div class="transaction-list">
+                                        <div v-if="transactions.length === 0" class="empty-state">
+                                            <i class="fas fa-history"></i>
+                                            <p>No transactions found</p>
+                                        </div>
+                                        <div v-for="transaction in transactions" :key="transaction.id" class="transaction-item">
+                                            <div class="transaction-icon" :class="getTransactionClass(transaction)">
+                                                <i :class="getTransactionIcon(transaction)"></i>
+                                            </div>
+                                            <div class="transaction-details">
+                                                <div class="transaction-description">{{ transaction.description }}</div>
+                                                <div class="transaction-meta">{{ formatDate(transaction.timestamp) }}</div>
+                                            </div>
+                                            <div class="transaction-amount" :class="transaction.amount >= 0 ? 'positive' : 'negative'">
+                                                {{ transaction.amount >= 0 ? '+' : '' }}£{{ formatMoney(transaction.amount) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Businesses Tab -->
+                            <div v-if="activeTab === 'businesses'">
+                                <div class="content-header">
+                                    <h2><i class="fas fa-store"></i> Businesses</h2>
+                                    <div class="header-actions">
+                                        <button v-if="hasPermission('manageBusinesses')" @click="showCreateBusinessModal = true" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-plus"></i> Create Business
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="territories-grid">
+                                    <div v-if="businesses.length === 0" class="empty-state">
+                                        <i class="fas fa-store"></i>
+                                        <p>No businesses found</p>
+                                    </div>
+                                    <div v-for="business in businesses" :key="business.id" class="territory-card">
+                                        <div class="territory-header">
+                                            <div class="territory-name">{{ formatBusinessType(business.type) }}</div>
+                                            <div class="territory-owner">Level {{ business.level }}</div>
+                                        </div>
+                                        <div class="territory-body">
+                                            <div class="territory-stats">
+                                                <div class="territory-stat">
+                                                    <div class="label">Income</div>
+                                                    <div class="value">£{{ business.income }}/hr</div>
+                                                </div>
+                                                <div class="territory-stat">
+                                                    <div class="label">Stored</div>
+                                                    <div class="value">£{{ business.income_stored }}</div>
+                                                </div>
+                                                <div class="territory-stat">
+                                                    <div class="label">Employees</div>
+                                                    <div class="value">{{ business.employees }}/{{ business.capacity }}</div>
+                                                </div>
+                                                <div class="territory-stat">
+                                                    <div class="label">Security</div>
+                                                    <div class="value">{{ business.security }}/3</div>
+                                                </div>
+                                            </div>
+                                            <div class="territory-actions">
+                                                <button @click="collectBusinessIncome(business)" class="btn btn-sm btn-success">
+                                                    <i class="fas fa-hand-holding-usd"></i> Collect
+                                                </button>
+                                                <button v-if="hasPermission('manageBusinesses')" @click="showBusinessUpgradeModal(business)" class="btn btn-sm btn-secondary">
+                                                    <i class="fas fa-arrow-up"></i> Upgrade
+                                                </button>
+                                                <button v-if="hasPermission('manageBusinesses')" @click="manageBusinessEmployees(business)" class="btn btn-sm btn-secondary">
+                                                    <i class="fas fa-users-cog"></i> Manage
+                                                </button>
+                                                <button @click="viewBusiness(business)" class="btn btn-sm btn-secondary">
+                                                    <i class="fas fa-eye"></i> View
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Drugs Tab -->
+                            <div v-if="activeTab === 'drugs'">
+                                <div class="content-header">
+                                    <h2><i class="fas fa-cannabis"></i> Drug Operations</h2>
+                                    <div class="header-actions">
+                                        <button v-if="hasPermission('manageDrugs')" @click="showCreateFieldModal = true" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-seedling"></i> Create Field
+                                        </button>
+                                        <button v-if="hasPermission('manageDrugs')" @click="showCreateLabModal = true" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-flask"></i> Create Lab
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="content-section">
+                                    <div class="section-header">
+                                        <div class="section-title">
+                                            <i class="fas fa-seedling"></i> Drug Fields
+                                        </div>
+                                    </div>
+                                    <div class="territories-grid">
+                                        <div v-if="drugFields.length === 0" class="empty-state">
+                                            <i class="fas fa-seedling"></i>
+                                            <p>No drug fields found</p>
+                                        </div>
+                                        <div v-for="field in drugFields" :key="field.id" class="territory-card">
+                                            <div class="territory-header">
+                                                <div class="territory-name">{{ formatResourceType(field.resourceType) }} Field</div>
+                                                <div class="territory-owner">{{ field.territoryName }}</div>
+                                            </div>
+                                            <div class="territory-body">
+                                                <div class="territory-status" :class="getGrowthStatusClass(field)">
+                                                    {{ getGrowthStatusText(field) }}
+                                                </div>
+                                                <div class="territory-stats">
+                                                    <div class="territory-stat">
+                                                        <div class="label">Growth</div>
+                                                        <div class="value">{{ field.growthStage }}/10</div>
+                                                    </div>
+                                                    <div class="territory-stat">
+                                                        <div class="label">Quality</div>
+                                                        <div class="value">{{ field.qualityRangeMin }}-{{ field.qualityRangeMax }}%</div>
+                                                    </div>
+                                                </div>
+                                                <div class="territory-actions">
+                                                    <button v-if="canHarvest(field)" @click="harvestField(field)" class="btn btn-sm btn-success">
+                                                        <i class="fas fa-cut"></i> Harvest
+                                                    </button>
+                                                    <button @click="viewField(field)" class="btn btn-sm btn-secondary">
+                                                        <i class="fas fa-eye"></i> View
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="content-section">
+                                    <div class="section-header">
+                                        <div class="section-title">
+                                            <i class="fas fa-flask"></i> Drug Labs
+                                        </div>
+                                    </div>
+                                    <div class="territories-grid">
+                                        <div v-if="drugLabs.length === 0" class="empty-state">
+                                            <i class="fas fa-flask"></i>
+                                            <p>No drug labs found</p>
+                                        </div>
+                                        <div v-for="lab in drugLabs" :key="lab.id" class="territory-card">
+                                            <div class="territory-header">
+                                                <div class="territory-name">{{ formatDrugType(lab.drugType) }} Lab</div>
+                                                <div class="territory-owner">{{ lab.territoryName }}</div>
+                                            </div>
+                                            <div class="territory-body">
+                                                <div class="territory-stats">
+                                                    <div class="territory-stat">
+                                                        <div class="label">Level</div>
+                                                        <div class="value">{{ lab.level }}/5</div>
+                                                    </div>
+                                                    <div class="territory-stat">
+                                                        <div class="label">Capacity</div>
+                                                        <div class="value">{{ lab.capacity }}</div>
+                                                    </div>
+                                                    <div class="territory-stat">
+                                                        <div class="label">Security</div>
+                                                        <div class="value">{{ lab.security }}/100</div>
+                                                    </div>
+                                                </div>
+                                                <div class="territory-actions">
+                                                    <button @click="processDrugs(lab)" class="btn btn-sm btn-success">
+                                                        <i class="fas fa-vial"></i> Process
+                                                    </button>
+                                                    <button v-if="hasPermission('manageDrugs')" @click="showLabUpgradeModal(lab)" class="btn btn-sm btn-secondary">
+                                                        <i class="fas fa-arrow-up"></i> Upgrade
+                                                    </button>
+                                                    <button @click="viewLab(lab)" class="btn btn-sm btn-secondary">
+                                                        <i class="fas fa-eye"></i> View
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Vehicles Tab -->
+                            <div v-if="activeTab === 'vehicles'">
+                                <div class="content-header">
+                                    <h2><i class="fas fa-car"></i> Gang Vehicles</h2>
+                                    <div class="header-actions">
+                                        <button v-if="hasPermission('manageVehicles')" @click="registerVehicle" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-plus"></i> Register Vehicle
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="filter-bar">
+                                    <div class="search-box">
+                                        <i class="fas fa-search"></i>
+                                        <input type="text" v-model="vehicleSearch" placeholder="Search vehicles...">
+                                    </div>
+                                    <div class="filter-actions">
+                                        <select v-model="vehicleFilter" class="filter-select">
+                                            <option value="all">All Vehicles</option>
+                                            <option value="stored">Stored</option>
+                                            <option value="out">Out</option>
+                                            <option value="impounded">Impounded</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="territories-grid">
+                                    <div v-if="filteredVehicles.length === 0" class="empty-state">
+                                        <i class="fas fa-car"></i>
+                                        <p>No vehicles found</p>
+                                    </div>
+                                    <div v-for="vehicle in filteredVehicles" :key="vehicle.plate" class="territory-card">
+                                        <div class="territory-header">
+                                            <div class="territory-name">{{ vehicle.label }}</div>
+                                            <div class="territory-owner">{{ vehicle.plate }}</div>
+                                        </div>
+                                        <div class="territory-body">
+                                            <div class="territory-status" :class="getVehicleStatusClass(vehicle)">
+                                                {{ getVehicleStatusText(vehicle) }}
+                                            </div>
+                                            <div class="territory-stats">
+                                                <div class="territory-stat">
+                                                    <div class="label">Model</div>
+                                                    <div class="value">{{ getVehicleModelName(vehicle.model) }}</div>
+                                                </div>
+                                                <div class="territory-stat">
+                                                    <div class="label">Last Seen</div>
+                                                    <div class="value">{{ formatDate(vehicle.lastSeen) }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="territory-actions">
+                                                <button v-if="vehicle.stored" @click="spawnVehicle(vehicle)" class="btn btn-sm btn-success">
+                                                    <i class="fas fa-car"></i> Spawn
+                                                </button>
+                                                <button v-if="!vehicle.stored && !vehicle.impounded" @click="storeVehicle(vehicle)" class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-parking"></i> Store
+                                                </button>
+                                                <button v-if="!vehicle.stored && !vehicle.impounded" @click="trackVehicle(vehicle)" class="btn btn-sm btn-secondary">
+                                                    <i class="fas fa-map-marker-alt"></i> Track
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Heists Tab -->
+                            <div v-if="activeTab === 'heists'">
+                                <div class="content-header">
+                                    <h2><i class="fas fa-mask"></i> Heists</h2>
+                                    <div class="header-actions">
+                                        <button v-if="hasPermission('manageHeists')" @click="showStartHeistModal = true" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-plus"></i> Start Heist
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="content-section">
+                                    <div class="section-header">
+                                        <div class="section-title">
+                                            <i class="fas fa-play"></i> Active Heists
+                                        </div>
+                                    </div>
+                                    <div class="territories-grid">
+                                        <div v-if="activeHeists.length === 0" class="empty-state">
+                                            <i class="fas fa-mask"></i>
+                                            <p>No active heists</p>
+                                        </div>
+                                        <div v-for="heist in activeHeists" :key="heist.id" class="territory-card">
+                                            <div class="territory-header">
+                                                <div class="territory-name">{{ formatHeistType(heist.heistType) }}</div>
+                                                <div class="territory-owner">Stage {{ heist.currentStage }}</div>
+                                            </div>
+                                            <div class="territory-body">
+                                                <div class="territory-stats">
+                                                    <div class="territory-stat">
+                                                        <div class="label">Started</div>
+                                                        <div class="value">{{ formatDate(heist.startTime) }}</div>
+                                                    </div>
+                                                    <div class="territory-stat">
+                                                        <div class="label">Participants</div>
+                                                        <div class="value">{{ Object.keys(heist.participants).length }}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="territory-actions">
+                                                    <button @click="joinHeist(heist)" class="btn btn-sm btn-success">
+                                                        <i class="fas fa-sign-in-alt"></i> Join
+                                                    </button>
+                                                    <button @click="startHeistMission(heist)" class="btn btn-sm btn-primary">
+                                                        <i class="fas fa-play"></i> Start Mission
+                                                    </button>
+                                                    <button v-if="hasPermission('manageHeists')" @click="cancelHeist(heist)" class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-times"></i> Cancel
+                                                    </button>
+                                                    <button @click="viewHeist(heist)" class="btn btn-sm btn-secondary">
+                                                        <i class="fas fa-eye"></i> View
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="content-section">
+                                    <div class="section-header">
+                                        <div class="section-title">
+                                            <i class="fas fa-list"></i> Available Heists
+                                        </div>
+                                    </div>
+                                    <div class="territories-grid">
+                                        <div v-for="(heist, type) in availableHeists" :key="type" class="territory-card">
+                                            <div class="territory-header">
+                                                <div class="territory-name">{{ formatHeistType(type) }}</div>
+                                                <div class="territory-owner">{{ heist.category }}</div>
+                                            </div>
+                                            <div class="territory-body">
+                                                <div class="territory-stats">
+                                                    <div class="territory-stat">
+                                                        <div class="label">Payout</div>
+                                                        <div class="value">£{{ heist.rewards.basePayout.min }}-£{{ heist.rewards.basePayout.max }}</div>
+                                                    </div>
+                                                    <div class="territory-stat">
+                                                        <div class="label">Reputation</div>
+                                                        <div class="value">+{{ heist.rewards.reputation }}</div>
+                                                    </div>
+                                                    <div class="territory-stat">
+                                                        <div class="label">Required</div>
+                                                        <div class="value">{{ heist.minMembers }}-{{ heist.maxMembers }} members</div>
+                                                    </div>
+                                                    <div class="territory-stat">
+                                                        <div class="label">Police</div>
+                                                        <div class="value">{{ heist.policeRequired }} required</div>
+                                                    </div>
+                                                </div>
+                                                <div class="territory-actions">
+                                                    <button v-if="hasPermission('manageHeists')" @click="startHeist(type)" class="btn btn-sm btn-primary">
+                                                        <i class="fas fa-play"></i> Start
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Wars Tab -->
+                            <div v-if="activeTab === 'wars'">
+                                <div class="content-header">
+                                    <h2><i class="fas fa-crosshairs"></i> Gang Wars</h2>
+                                    <div class="header-actions">
+                                        <button v-if="hasPermission('declareWar')" @click="showDeclareWarModal = true" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-flag"></i> Declare War
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="content-section">
+                                    <div class="section-header">
+                                        <div class="section-title">
+                                            <i class="fas fa-fire"></i> Active Wars
+                                        </div>
+                                    </div>
+                                    <div class="territories-grid">
+                                        <div v-if="activeWars.length === 0" class="empty-state">
+                                            <i class="fas fa-crosshairs"></i>
+                                            <p>No active wars</p>
+                                        </div>
+                                        <div v-for="war in activeWars" :key="war.id" class="territory-card">
+                                            <div class="territory-header">
+                                                <div class="territory-name">{{ war.attackerName }} vs {{ war.defenderName }}</div>
+                                                <div class="territory-owner">{{ war.territoryName }}</div>
+                                            </div>
+                                            <div class="territory-body">
+                                                <div class="territory-stats">
+                                                    <div class="territory-stat">
+                                                        <div class="label">Started</div>
+                                                        <div class="value">{{ formatDate(war.startedAt) }}</div>
+                                                    </div>
+                                                    <div class="territory-stat">
+                                                        <div class="label">Score</div>
+                                                        <div class="value">{{ war.attackerScore }} - {{ war.defenderScore }}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="territory-actions">
+                                                    <button v-if="isWarParticipant(war) && hasPermission('declareWar')" @click="surrenderWar(war)" class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-flag"></i> Surrender
+                                                    </button>
+                                                    <button @click="viewWar(war)" class="btn btn-sm btn-secondary">
+                                                        <i class="fas fa-eye"></i> View
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="content-section">
+                                    <div class="section-header">
+                                        <div class="section-title">
+                                            <i class="fas fa-users"></i> Rival Gangs
+                                        </div>
+                                    </div>
+                                    <div class="territories-grid">
+                                        <div v-if="rivalGangs.length === 0" class="empty-state">
+                                            <i class="fas fa-users"></i>
+                                            <p>No rival gangs found</p>
+                                        </div>
+                                        <div v-for="gang in rivalGangs" :key="gang.id" class="territory-card">
+                                            <div class="territory-header" :style="{ background: gang.color || 'var(--primary-gradient)' }">
+                                                <div class="territory-name">{{ gang.name }}</div>
+                                                <div class="territory-owner">[{{ gang.tag }}]</div>
+                                            </div>
+                                            <div class="territory-body">
+                                                <div class="territory-stats">
+                                                    <div class="territory-stat">
+                                                        <div class="label">Territories</div>
+                                                        <div class="value">{{ getGangTerritoryCount(gang.id) }}</div>
+                                                    </div>
+                                                    <div class="territory-stat">
+                                                        <div class="label">Status</div>
+                                                        <div class="value">{{ isAtWarWith(gang.id) ? 'At War' : 'Peaceful' }}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="territory-actions">
+                                                    <button v-if="hasPermission('declareWar') && !isAtWarWith(gang.id)" @click="declareWarOnGang(gang)" class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-flag"></i> Declare War
+                                                    </button>
+                                                    <button @click="transferMoney(gang)" class="btn btn-sm btn-secondary">
+                                                        <i class="fas fa-exchange-alt"></i> Transfer
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Settings Tab -->
+                            <div v-if="activeTab === 'settings'">
+                                <div class="content-header">
+                                    <h2><i class="fas fa-cog"></i> Gang Settings</h2>
+                                </div>
+                                
+                                <div class="content-section">
+                                    <div class="section-header">
+                                        <div class="section-title">
+                                            <i class="fas fa-edit"></i> Gang Information
+                                        </div>
+                                    </div>
+                                    <div class="settings-form">
+                                        <div class="form-group">
+                                            <label class="form-label">Gang Name</label>
+                                            <div class="input-group">
+                                                <input type="text" v-model="settings.name" class="form-input" :disabled="!hasPermission('manageSettings')">
+                                                <button v-if="hasPermission('manageSettings')" @click="changeGangName" class="btn btn-secondary">Update</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Gang Tag</label>
+                                            <div class="input-group">
+                                                <input type="text" v-model="settings.tag" class="form-input" :disabled="!hasPermission('manageSettings')">
+                                                <button v-if="hasPermission('manageSettings')" @click="changeGangTag" class="btn btn-secondary">Update</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Gang Color</label>
+                                            <div class="input-group">
+                                                <input type="color" v-model="settings.color" class="form-input color-picker" :disabled="!hasPermission('manageSettings')">
+                                                <button v-if="hasPermission('manageSettings')" @click="changeGangColor" class="btn btn-secondary">Update</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Gang Logo</label>
+                                            <div class="input-group">
+                                                <select v-model="settings.logo" class="form-input" :disabled="!hasPermission('manageSettings')">
+                                                    <option value="">None</option>
+                                                    <option v-for="logo in availableLogos" :key="logo" :value="logo">{{ logo }}</option>
+                                                </select>
+                                                <button v-if="hasPermission('manageSettings')" @click="changeGangLogo" class="btn btn-secondary">Update</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Maximum Members</label>
+                                            <div class="input-group">
+                                                <input type="number" v-model="settings.maxMembers" class="form-input" :disabled="!hasPermission('manageSettings')" min="5" max="50">
+                                                <button v-if="hasPermission('manageSettings')" @click="setMaxMembers" class="btn btn-secondary">Update</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div v-if="isGangLeader" class="content-section">
+                                    <div class="section-header">
+                                        <div class="section-title">
+                                            <i class="fas fa-crown"></i> Leadership
+                                        </div>
+                                    </div>
+                                    <div class="settings-form">
+                                        <div class="form-group">
+                                            <label class="form-label">Transfer Leadership</label>
+                                            <div class="input-group">
+                                                <select v-model="settings.newLeader" class="form-input">
+                                                    <option value="">Select Member</option>
+                                                    <option v-for="member in members" :key="member.citizenId" :value="member.citizenId">{{ member.name }}</option>
+                                                </select>
+                                                <button @click="transferLeadership" class="btn btn-warning">Transfer</button>
+                                            </div>
+                                            <p class="form-help">Warning: This will transfer gang leadership to another member.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="leave-gang">
+                                    <h3><i class="fas fa-sign-out-alt"></i> Leave Gang</h3>
+                                    <p>Warning: This action cannot be undone. You will lose all gang privileges.</p>
+                                    <button @click="showLeaveGangModal = true" class="btn btn-danger">Leave Gang</button>
+                                </div>
+                                
+                                <div v-if="isGangLeader" class="danger-zone">
+                                    <h3><i class="fas fa-exclamation-triangle"></i> Danger Zone</h3>
+                                    <p>Warning: These actions are permanent and cannot be undone.</p>
+                                    <button @click="showDisbandGangModal = true" class="btn btn-danger">Disband Gang</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Loading Overlay -->
+                <div class="loading-overlay" :class="{ visible: isLoading }">
+                    <div class="loading-content">
+                        <div class="loading-spinner"></div>
+                        <div class="loading-message">{{ loadingMessage }}</div>
+                    </div>
+                </div>
+                
+                <!-- Notifications -->
+                <div class="notifications">
+                    <div v-for="notification in notifications" :key="notification.id" class="notification" :class="notification.type">
+                        <div class="notification-icon" :class="notification.type">
+                            <i :class="getNotificationIcon(notification.type)"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-message">{{ notification.message }}</div>
+                            <div class="notification-time">{{ notification.time }}</div>
+                        </div>
+                        <button @click="dismissNotification(notification.id)" class="notification-close">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Modals -->
+                <!-- Invite Member Modal -->
+                <div v-if="showInviteModal" class="modal-overlay" @click.self="showInviteModal = false">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h2>Invite Member</h2>
+                            <button @click="showInviteModal = false" class="modal-close"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="form-label">Nearby Players</label>
+                                <select v-model="inviteData.playerId" class="form-input">
+                                    <option value="">Select Player</option>
+                                    <option v-for="player in nearbyPlayers" :key="player.id" :value="player.id">{{ player.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button @click="showInviteModal = false" class="btn btn-secondary">Cancel</button>
+                            <button @click="invitePlayer" class="btn btn-primary">Invite</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Deposit Modal -->
+                <div v-if="showDepositModal" class="modal-overlay" @click.self="showDepositModal = false">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h2>Deposit Money</h2>
+                            <button @click="showDepositModal = false" class="modal-close"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="form-label">Amount</label>
+                                <div class="input-group">
+                                    <div class="input-group-text">£</div>
+                                    <input type="number" v-model="bankData.depositAmount" class="form-input" min="1">
+                                </div>
+                            </div>
+                            <div class="modal-info">
+                                Your Cash: £{{ formatMoney(playerData.money) }}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button @click="showDepositModal = false" class="btn btn-secondary">Cancel</button>
+                            <button @click="depositMoney" class="btn btn-primary">Deposit</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Withdraw Modal -->
+                <div v-if="showWithdrawModal" class="modal-overlay" @click.self="showWithdrawModal = false">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h2>Withdraw Money</h2>
+                            <button @click="showWithdrawModal = false" class="modal-close"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="form-label">Amount</label>
+                                <div class="input-group">
+                                    <div class="input-group-text">£</div>
+                                    <input type="number" v-model="bankData.withdrawAmount" class="form-input" min="1">
+                                </div>
+                            </div>
+                            <div class="modal-info">
+                                Gang Bank: £{{ formatMoney(gangData.bank || 0) }}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button @click="showWithdrawModal = false" class="btn btn-secondary">Cancel</button>
+                            <button @click="withdrawMoney" class="btn btn-primary">Withdraw</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Transfer Modal -->
+                <div v-if="showTransferModal" class="modal-overlay" @click.self="showTransferModal = false">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h2>Transfer Money</h2>
+                            <button @click="showTransferModal = false" class="modal-close"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="form-label">Target Gang</label>
+                                <select v-model="bankData.targetGangId" class="form-input">
+                                    <option value="">Select Gang</option>
+                                    <option v-for="gang in availableGangs" :key="gang.id" :value="gang.id">{{ gang.name }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Amount</label>
+                                <div class="input-group">
+                                    <div class="input-group-text">£</div>
+                                    <input type="number" v-model="bankData.transferAmount" class="form-input" min="1">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Reason</label>
+                                <input type="text" v-model="bankData.transferReason" class="form-input" placeholder="Optional">
+                            </div>
+                            <div class="modal-info">
+                                Gang Bank: £{{ formatMoney(gangData.bank || 0) }}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button @click="showTransferModal = false" class="btn btn-secondary">Cancel</button>
+                            <button @click="transferMoney" class="btn btn-primary">Transfer</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Territory Upgrade Modal -->
+                <div v-if="showTerritoryUpgradeModal" class="modal-overlay" @click.self="showTerritoryUpgradeModal = false">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h2>Upgrade Territory: {{ selectedTerritory ? selectedTerritory.name : '' }}</h2>
+                            <button @click="showTerritoryUpgradeModal = false" class="modal-close"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="form-label">Upgrade Type</label>
+                                <select v-model="territoryUpgradeData.type" class="form-input">
+                                    <option value="">Select Upgrade</option>
+                                    <option value="income">Income (+10% per level)</option>
+                                    <option value="security">Security (+10% defense per level)</option>
+                                    <option value="quality">Quality (+5% drug quality per level)</option>
+                                    <option value="sales">Sales (+5% drug sales per level)</option>
+                                </select>
+                            </div>
+                            <div class="modal-info">
+                                Current Level: {{ getTerritoryUpgradeLevel() }}/5<br>
+                                Cost: £{{ calculateUpgradeCost() }}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button @click="showTerritoryUpgradeModal = false" class="btn btn-secondary">Cancel</button>
+                            <button @click="upgradeTerritory" class="btn btn-primary">Upgrade</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Create Business Modal -->
+                <div v-if="showCreateBusinessModal" class="modal-overlay" @click.self="showCreateBusinessModal = false">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h2>Create Business</h2>
+                            <button @click="showCreateBusinessModal = false" class="modal-close"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="form-label">Business Type</label>
+                                <select v-model="businessData.type" class="form-input">
+                                    <option value="">Select Type</option>
+                                    <option v-for="(business, type) in businessTypes" :key="type" :value="type">{{ business.name }}</option>
+                                </select>
+                            </div>
+                            <div v-if="businessData.type" class="modal-info">
+                                {{ businessTypes[businessData.type].description }}<br>
+                                Cost: £{{ businessTypes[businessData.type].purchaseCost }}<br>
+                                Income: £{{ businessTypes[businessData.type].income }}/hr
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button @click="showCreateBusinessModal = false" class="btn btn-secondary">Cancel</button>
+                            <button @click="createBusiness" class="btn btn-primary">Create</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Business Upgrade Modal -->
+                <div v-if="showBusinessUpgradeModal" class="modal-overlay" @click.self="showBusinessUpgradeModal = false">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h2>Upgrade Business: {{ selectedBusiness ? formatBusinessType(selectedBusiness.type) : '' }}</h2>
+                            <button @click="showBusinessUpgradeModal = false" class="modal-close"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="form-label">Upgrade Type</label>
+                                <select v-model="businessUpgradeData.type" class="form-input">
+                                    <option value="">Select Upgrade</option>
+                                    <option value="level">Main Level (+20% income)</option>
+                                    <option value="security">Security (Reduces raid chance)</option>
+                                    <option value="capacity">Capacity (+5 employees)</option>
+                                </select>
+                            </div>
+                            <div class="modal-info">
+                                Cost: £{{ calculateBusinessUpgradeCost() }}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button @click="showBusinessUpgradeModal = false" class="btn btn-secondary">Cancel</button>
+                            <button @click="upgradeBusiness" class="btn btn-primary">Upgrade</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Create Field Modal -->
+                <div v-if="showCreateFieldModal" class="modal-overlay" @click.self="showCreateFieldModal = false">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h2>Create Drug Field</h2>
+                            <button @click="showCreateFieldModal = false" class="modal-close"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="form-label">Resource Type</label>
+                                <select v-model="fieldData.resourceType" class="form-input">
+                                    <option value="">Select Type</option>
+                                    <option value="weed">Weed</option>
+                                    <option value="coke">Cocaine</option>
+                                    <option value="meth">Meth</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Territory</label>
+                                <select v-model="fieldData.territoryName" class="form-input">
+                                    <option value="">Select Territory</option>
+                                    <option v-for="territory in ownedTerritories" :key="territory.name" :value="territory.name">{{ territory.label || territory.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button @click="showCreateFieldModal = false" class="btn btn-secondary">Cancel</button>
+                            <button @click="createField" class="btn btn-primary">Create</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Create Lab Modal -->
+                <div v-if="showCreateLabModal" class="modal-overlay" @click.self="showCreateLabModal = false">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h2>Create Drug Lab</h2>
+                            <button @click="showCreateLabModal = false" class="modal-close"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="form-label">Drug Type</label>
+                                <select v-model="labData.drugType" class="form-input">
+                                    <option value="">Select Type</option>
+                                    <option value="weed">Weed</option>
+                                    <option value="coke">Cocaine</option>
+                                    <option value="meth">Meth</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Territory</label>
+                                <select v-model="labData.territoryName" class="form-input">
+                                    <option value="">Select Territory</option>
+                                    <option v-for="territory in ownedTerritories" :key="territory.name" :value="territory.name">{{ territory.label || territory.name }}</option>
+                                </select>
+                            </div>
+                            <div class="modal-info">
+                                Cost: £50,000
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button @click="showCreateLabModal = false" class="btn btn-secondary">Cancel</button>
+                            <button @click="createLab" class="btn btn-primary">Create</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Lab Upgrade Modal -->
+                <div v-if="showLabUpgradeModal" class="modal-overlay" @click.self="showLabUpgradeModal = false">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h2>Upgrade Lab: {{ selectedLab ? formatDrugType(selectedLab.drugType) : '' }}</h2>
+                            <button @click="showLabUpgradeModal = false" class="modal-close"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="form-label">Upgrade Type</label>
+                                <select v-model="labUpgradeData.type" class="form-input">
+                                    <option value="">Select Upgrade</option>
+                                    <option value="level">Level (Improves quality)</option>
+                                    <option value="capacity">Capacity (Increases storage)</option>
+                                    <option value="security">Security (Reduces raid chance)</option>
+                                </select>
+                            </div>
+                            <div class="modal-info">
+                                Cost: £{{ calculateLabUpgradeCost() }}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button @click="showLabUpgradeModal = false" class="btn btn-secondary">Cancel</button>
+                            <button @click="upgradeLab" class="btn btn-primary">Upgrade</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Start Heist Modal -->
+                <div v-if="showStartHeistModal" class="modal-overlay" @click.self="showStartHeistModal = false">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h2>Start Heist</h2>
+                            <button @click="showStartHeistModal = false" class="modal-close"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="form-label">Heist Type</label>
+                                <select v-model="heistData.type" class="form-input">
+                                    <option value="">Select Type</option>
+                                    <option v-for="(heist, type) in availableHeists" :key="type" :value="type">{{ formatHeistType(type) }}</option>
+                                </select>
+                            </div>
+                            <div v-if="heistData.type && availableHeists[heistData.type]" class="modal-info">
+                                {{ availableHeists[heistData.type].description || 'No description available' }}<br>
+                                Required Members: {{ availableHeists[heistData.type].minMembers }}-{{ availableHeists[heistData.type].maxMembers }}<br>
+                                Police Required: {{ availableHeists[heistData.type].policeRequired }}<br>
+                                Payout: £{{ availableHeists[heistData.type].rewards.basePayout.min }}-£{{ availableHeists[heistData.type].rewards.basePayout.max }}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button @click="showStartHeistModal = false" class="btn btn-secondary">Cancel</button>
+                            <button @click="startHeist" class="btn btn-primary">Start</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Declare War Modal -->
+                <div v-if="showDeclareWarModal" class="modal-overlay" @click.self="showDeclareWarModal = false">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h2>Declare War</h2>
+                            <button @click="showDeclareWarModal = false" class="modal-close"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="form-label">Target Gang</label>
+                                <select v-model="warData.targetGangId" class="form-input">
+                                    <option value="">Select Gang</option>
+                                    <option v-for="gang in rivalGangs" :key="gang.id" :value="gang.id">{{ gang.name }}</option>
+                                </select>
+                            </div>
+                            <div v-if="warData.targetGangId" class="form-group">
+                                <label class="form-label">Territory</label>
+                                <select v-model="warData.territoryName" class="form-input">
+                                    <option value="">Select Territory</option>
+                                    <option v-for="territory in getGangTerritories(warData.targetGangId)" :key="territory.name" :value="territory.name">{{ territory.label || territory.name }}</option>
+                                </select>
+                            </div>
+                            <div class="modal-warning">
+                                War Declaration Cost: £{{ warConfig.declarationCost || 75000 }}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button @click="showDeclareWarModal = false" class="btn btn-secondary">Cancel</button>
+                            <button @click="declareWar" class="btn btn-danger">Declare War</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Leave Gang Modal -->
+                <div v-if="showLeaveGangModal" class="modal-overlay" @click.self="showLeaveGangModal = false">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h2>Leave Gang</h2>
+                            <button @click="showLeaveGangModal = false" class="modal-close"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="modal-danger">
+                                Are you sure you want to leave {{ gangData.name }}?<br>
+                                This action cannot be undone.
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Confirm by typing "LEAVE"</label>
+                                <input type="text" v-model="leaveConfirmation" class="form-input">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button @click="showLeaveGangModal = false" class="btn btn-secondary">Cancel</button>
+                            <button @click="leaveGang" class="btn btn-danger" :disabled="leaveConfirmation !== 'LEAVE'">Leave Gang</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Disband Gang Modal -->
+                <div v-if="showDisbandGangModal" class="modal-overlay" @click.self="showDisbandGangModal = false">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h2>Disband Gang</h2>
+                            <button @click="showDisbandGangModal = false" class="modal-close"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="modal-danger">
+                                Are you sure you want to disband {{ gangData.name }}?<br>
+                                This will permanently delete the gang and all its data.<br>
+                                All members will be removed and territories will be lost.<br>
+                                This action CANNOT be undone.
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Confirm by typing "DISBAND {{ gangData.name }}"</label>
+                                <input type="text" v-model="disbandConfirmation" class="form-input">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button @click="showDisbandGangModal = false" class="btn btn-secondary">Cancel</button>
+                            <button @click="disbandGang" class="btn btn-danger" :disabled="disbandConfirmation !== 'DISBAND ' + gangData.name">Disband Gang</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Admin Panel -->
+                <div v-if="showAdminPanel" class="modal-overlay">
+                    <div class="admin-container">
+                        <div class="admin-sidebar">
+                            <div class="admin-nav-item" :class="{ active: adminTab === 'gangs' }" @click="setAdminTab('gangs')">
+                                <i class="fas fa-users"></i>
+                                <span>Gangs</span>
+                            </div>
+                            <div class="admin-nav-item" :class="{ active: adminTab === 'players' }" @click="setAdminTab('players')">
+                                <i class="fas fa-user"></i>
+                                <span>Players</span>
+                            </div>
+                            <div class="admin-nav-item" :class="{ active: adminTab === 'territories' }" @click="setAdminTab('territories')">
+                                <i class="fas fa-map-marked-alt"></i>
+                                <span>Territories</span>
+                            </div>
+                            <div class="admin-nav-item" :class="{ active: adminTab === 'logs' }" @click="setAdminTab('logs')">
+                                <i class="fas fa-history"></i>
+                                <span>Logs</span>
+                            </div>
+                            <div class="admin-nav-item" @click="closeAdminPanel">
+                                <i class="fas fa-times"></i>
+                                <span>Close</span>
+                            </div>
+                        </div>
+                        <div class="admin-content">
+                            <div class="admin-header">
+                                <div class="admin-title">
+                                    <span v-if="adminTab === 'gangs'">Gang Management</span>
+                                    <span v-if="adminTab === 'players'">Player Management</span>
+                                    <span v-if="adminTab === 'territories'">Territory Management</span>
+                                    <span v-if="adminTab === 'logs'">Activity Logs</span>
+                                </div>
+                                <div class="admin-actions">
+                                    <button v-if="adminTab === 'gangs'" @click="showAdminCreateGangModal = true" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-plus"></i> Create Gang
+                                    </button>
+                                    <button @click="refreshAdminData" class="btn btn-secondary btn-sm">
+                                        <i class="fas fa-sync-alt"></i> Refresh
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="admin-body">
+                                <!-- Gangs Tab -->
+                                <div v-if="adminTab === 'gangs'">
+                                    <div class="admin-section-header">
+                                        <h3>All Gangs</h3>
+                                        <div class="search-box">
+                                            <i class="fas fa-search"></i>
+                                            <input type="text" v-model="adminGangSearch" placeholder="Search gangs...">
+                                        </div>
+                                    </div>
+                                    <div class="admin-table-container">
+                                        <table class="admin-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Gang</th>
+                                                    <th>Members</th>
+                                                    <th>Bank</th>
+                                                    <th>Territories</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="gang in filteredAdminGangs" :key="gang.id">
+                                                    <td>
+                                                        <div class="gang-info-cell">
+                                                            <div class="gang-logo-small" :style="{ backgroundColor: gang.color || '#808080' }">
+                                                                {{ gang.tag }}
+                                                            </div>
+                                                            <div>
+                                                                <div class="gang-name">{{ gang.name }}</div>
+                                                                <div class="gang-tag">[{{ gang.tag }}]</div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{ gang.memberCount }}/{{ gang.max_members }}</td>
+                                                    <td>£{{ formatMoney(gang.bank) }}</td>
+                                                    <td>{{ getGangTerritoryCount(gang.id) }}</td>
+                                                    <td>
+                                                        <div class="admin-table-actions">
+                                                            <button @click="viewGangMembers(gang)" class="btn btn-sm btn-secondary">
+                                                                <i class="fas fa-users"></i>
+                                                            </button>
+                                                            <button @click="editGang(gang)" class="btn btn-sm btn-secondary">
+                                                                <i class="fas fa-edit"></i>
+                                                            </button>
+                                                            <button @click="deleteGang(gang)" class="btn btn-sm btn-danger">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <!-- Players Tab -->
+                                <div v-if="adminTab === 'players'">
+                                    <div class="admin-section-header">
+                                        <h3>Online Players</h3>
+                                        <div class="search-box">
+                                            <i class="fas fa-search"></i>
+                                            <input type="text" v-model="adminPlayerSearch" placeholder="Search players...">
+                                        </div>
+                                    </div>
+                                    <div class="admin-table-container">
+                                        <table class="admin-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Name</th>
+                                                    <th>Gang</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="player in filteredAdminPlayers" :key="player.source">
+                                                    <td>{{ player.source }}</td>
+                                                    <td>{{ player.name }}</td>
+                                                    <td>{{ player.gangName || 'None' }}</td>
+                                                    <td>
+                                                        <div class="admin-table-actions">
+                                                            <button @click="assignPlayerToGang(player)" class="btn btn-sm btn-secondary">
+                                                                <i class="fas fa-user-plus"></i>
+                                                            </button>
+                                                            <button @click="removePlayerFromGang(player)" class="btn btn-sm btn-danger" :disabled="!player.gangId">
+                                                                <i class="fas fa-user-minus"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <!-- Territories Tab -->
+                                <div v-if="adminTab === 'territories'">
+                                    <div class="admin-section-header">
+                                        <h3>All Territories</h3>
+                                        <div class="search-box">
+                                            <i class="fas fa-search"></i>
+                                            <input type="text" v-model="adminTerritorySearch" placeholder="Search territories...">
+                                        </div>
+                                    </div>
+                                    <div class="admin-table-container">
+                                        <table class="admin-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Owner</th>
+                                                    <th>Status</th>
+                                                    <th>Income</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="territory in filteredAdminTerritories" :key="territory.name">
+                                                    <td>{{ territory.label || territory.name }}</td>
+                                                    <td>{{ territory.gangName || 'Unclaimed' }}</td>
+                                                    <td>
+                                                        <span :class="getStatusClass(territory)">{{ getStatusText(territory) }}</span>
+                                                    </td>
+                                                    <td>£{{ territory.income }}/hr</td>
+                                                    <td>
+                                                        <div class="admin-table-actions">
+                                                            <button @click="setTerritoryOwner(territory)" class="btn btn-sm btn-secondary">
+                                                                <i class="fas fa-flag"></i>
+                                                            </button>
+                                                            <button @click="resetTerritory(territory)" class="btn btn-sm btn-danger">
+                                                                <i class="fas fa-undo"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <!-- Logs Tab -->
+                                <div v-if="adminTab === 'logs'">
+                                    <div class="admin-section-header">
+                                        <h3>Activity Logs</h3>
+                                        <div class="filter-actions">
+                                            <select v-model="adminLogFilter" class="filter-select">
+                                                <option value="all">All Logs</option>
+                                                <option value="gang">Gang Actions</option>
+                                                <option value="territory">Territory Actions</option>
+                                                <option value="money">Money Transactions</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="admin-table-container">
+                                        <table class="admin-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Time</th>
+                                                    <th>Gang</th>
+                                                    <th>Action</th>
+                                                    <th>Details</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="log in filteredAdminLogs" :key="log.id">
+                                                    <td>{{ formatDate(log.timestamp) }}</td>
+                                                    <td>{{ getGangName(log.gang_id) }}</td>
+                                                    <td>{{ log.action }}</td>
+                                                    <td>{{ log.details }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Admin Create Gang Modal -->
+                <div v-if="showAdminCreateGangModal" class="modal-overlay" @click.self="showAdminCreateGangModal = false">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h2>Create Gang</h2>
+                            <button @click="showAdminCreateGangModal = false" class="modal-close"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="form-label">Gang Name</label>
+                                <input type="text" v-model="adminGangData.name" class="form-input" placeholder="Gang Name">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Gang Tag</label>
+                                <input type="text" v-model="adminGangData.tag" class="form-input" placeholder="Tag">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Gang Color</label>
+                                <input type="color" v-model="adminGangData.color" class="form-input color-picker">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Max Members</label>
+                                <input type="number" v-model="adminGangData.maxMembers" class="form-input" min="5" max="50">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button @click="showAdminCreateGangModal = false" class="btn btn-secondary">Cancel</button>
+                            <button @click="adminCreateGang" class="btn btn-primary">Create</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Admin Edit Gang Modal -->
+                <div v-if="showAdminEditGangModal" class="modal-overlay" @click.self="showAdminEditGangModal = false">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h2>Edit Gang: {{ selectedAdminGang ? selectedAdminGang.name : '' }}</h2>
+                            <button @click="showAdminEditGangModal = false" class="modal-close"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="form-label">Gang Name</label>
+                                <input type="text" v-model="adminGangData.name" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Gang Tag</label>
+                                <input type="text" v-model="adminGangData.tag" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Gang Color</label>
+                                <input type="color" v-model="adminGangData.color" class="form-input color-picker">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Max Members</label>
+                                <input type="number" v-model="adminGangData.maxMembers" class="form-input" min="5" max="50">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button @click="showAdminEditGangModal = false" class="btn btn-secondary">Cancel</button>
+                            <button @click="adminUpdateGang" class="btn btn-primary">Update</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Admin Gang Members Modal -->
+                <div v-if="showAdminGangMembersModal" class="modal-overlay" @click.self="showAdminGangMembersModal = false">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h2>{{ selectedAdminGang ? selectedAdminGang.name : '' }} Members</h2>
+                            <button @click="showAdminGangMembersModal = false" class="modal-close"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="admin-table-container">
+                                <table class="admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Rank</th>
+                                            <th>Joined</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="member in adminGangMembers" :key="member.citizenId">
+                                            <td>{{ member.name }}</td>
+                                            <td>{{ getRankName(member.rank) }}</td>
+                                            <td>{{ formatDate(member.joinedAt) }}</td>
+                                            <td>{{ member.isOnline ? 'Online' : 'Offline' }}</td>
+                                            <td>
+                                                <div class="admin-table-actions">
+                                                    <button @click="adminPromoteMember(member)" class="btn btn-sm btn-secondary">
+                                                        <i class="fas fa-arrow-up"></i>
+                                                    </button>
+                                                    <button @click="adminDemoteMember(member)" class="btn btn-sm btn-secondary">
+                                                        <i class="fas fa-arrow-down"></i>
+                                                    </button>
+                                                    <button @click="adminRemoveMember(member)" class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-user-minus"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group" style="margin-top: 20px;">
+                                <label class="form-label">Add Member</label>
+                                <div class="input-group">
+                                    <select v-model="adminMemberData.playerId" class="form-input">
+                                        <option value="">Select Player</option>
+                                        <option v-for="player in adminPlayers" :key="player.citizenId" :value="player.citizenId">{{ player.name }}</option>
+                                    </select>
+                                    <select v-model="adminMemberData.rank" class="form-input">
+                                        <option value="1">Recruit</option>
+                                        <option value="2">Soldier</option>
+                                        <option value="3">Enforcer</option>
+                                        <option value="4">Lieutenant</option>
+                                        <option value="5">Underboss</option>
+                                        <option value="6">Boss</option>
+                                    </select>
+                                    <button @click="adminAddMember" class="btn btn-primary">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button @click="showAdminGangMembersModal = false" class="btn btn-secondary">Close</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Admin Set Territory Owner Modal -->
+                <div v-if="showAdminSetTerritoryOwnerModal" class="modal-overlay" @click.self="showAdminSetTerritoryOwnerModal = false">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h2>Set Territory Owner: {{ selectedAdminTerritory ? (selectedAdminTerritory.label || selectedAdminTerritory.name) : '' }}</h2>
+                            <button @click="showAdminSetTerritoryOwnerModal = false" class="modal-close"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="form-label">Gang</label>
+                                <select v-model="adminTerritoryData.gangId" class="form-input">
+                                    <option value="">Unclaimed</option>
+                                    <option v-for="gang in adminGangs" :key="gang.id" :value="gang.id">{{ gang.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button @click="showAdminSetTerritoryOwnerModal = false" class="btn btn-secondary">Cancel</button>
+                            <button @click="adminSetTerritoryOwner" class="btn btn-primary">Set Owner</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Admin Assign Player to Gang Modal -->
+                <div v-if="showAdminAssignPlayerModal" class="modal-overlay" @click.self="showAdminAssignPlayerModal = false">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h2>Assign Player to Gang: {{ selectedAdminPlayer ? selectedAdminPlayer.name : '' }}</h2>
+                            <button @click="showAdminAssignPlayerModal = false" class="modal-close"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="form-label">Gang</label>
+                                <select v-model="adminPlayerData.gangId" class="form-input">
+                                    <option value="">Select Gang</option>
+                                    <option v-for="gang in adminGangs" :key="gang.id" :value="gang.id">{{ gang.name }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Rank</label>
+                                <select v-model="adminPlayerData.rank" class="form-input">
+                                    <option value="1">Recruit</option>
+                                    <option value="2">Soldier</option>
+                                    <option value="3">Enforcer</option>
+                                    <option value="4">Lieutenant</option>
+                                    <option value="5">Underboss</option>
+                                    <option value="6">Boss</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button @click="showAdminAssignPlayerModal = false" class="btn btn-secondary">Cancel</button>
+                            <button @click="adminAssignPlayer" class="btn btn-primary">Assign</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Admin Delete Gang Confirmation Modal -->
+                <div v-if="showAdminDeleteGangModal" class="modal-overlay" @click.self="showAdminDeleteGangModal = false">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h2>Delete Gang: {{ selectedAdminGang ? selectedAdminGang.name : '' }}</h2>
+                            <button @click="showAdminDeleteGangModal = false" class="modal-close"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="modal-danger">
+                                Are you sure you want to delete this gang?<br>
+                                This will permanently remove the gang and all its data.<br>
+                                All members will be removed and territories will be lost.<br>
+                                This action CANNOT be undone.
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Confirm by typing "DELETE"</label>
+                                <input type="text" v-model="adminDeleteConfirmation" class="form-input">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button @click="showAdminDeleteGangModal = false" class="btn btn-secondary">Cancel</button>
+                            <button @click="adminConfirmDeleteGang" class="btn btn-danger" :disabled="adminDeleteConfirmation !== 'DELETE'">Delete Gang</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

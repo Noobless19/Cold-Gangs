@@ -1,0 +1,12 @@
+Config = Config or {}
+Config.Gangs = Config.Gangs or {}
+Config.Gangs.Ranks = {
+  [1] = { name = 'Recruit', level = 1, salary = 500, canViewGangInfo = true, canInviteMembers = false, canKickMembers = false, canManageRanks = false, canManageBank = false, canManageTerritories = false, canManageDrugs = false, canManageBusinesses = false, canManageHeists = false, canManageVehicles = false, canManageStashes = false, canDeclareWar = false, canManageSettings = false },
+  [2] = { name = 'Soldier', level = 2, salary = 750, canViewGangInfo = true, canInviteMembers = true, canKickMembers = false, canManageRanks = false, canManageBank = false, canManageTerritories = false, canManageDrugs = false, canManageBusinesses = false, canManageHeists = false, canManageVehicles = false, canManageStashes = false, canDeclareWar = false, canManageSettings = false },
+  [3] = { name = 'Enforcer', level = 3, salary = 1000, canViewGangInfo = true, canInviteMembers = true, canKickMembers = true, canManageRanks = false, canManageBank = false, canManageTerritories = true, canManageDrugs = false, canManageBusinesses = false, canManageHeists = false, canManageVehicles = true, canManageStashes = false, canDeclareWar = false, canManageSettings = false },
+  [4] = { name = 'Lieutenant', level = 4, salary = 1250, canViewGangInfo = true, canInviteMembers = true, canKickMembers = true, canManageRanks = true, canManageBank = true, canManageTerritories = true, canManageDrugs = true, canManageBusinesses = true, canManageHeists = true, canManageVehicles = true, canManageStashes = true, canDeclareWar = false, canManageSettings = false },
+  [5] = { name = 'Underboss', level = 5, salary = 1500, canViewGangInfo = true, canInviteMembers = true, canKickMembers = true, canManageRanks = true, canManageBank = true, canManageTerritories = true, canManageDrugs = true, canManageBusinesses = true, canManageHeists = true, canManageVehicles = true, canManageStashes = true, canDeclareWar = true, canManageSettings = false },
+  [6] = { name = 'Boss', level = 6, salary = 2000, canViewGangInfo = true, canInviteMembers = true, canKickMembers = true, canManageRanks = true, canManageBank = true, canManageTerritories = true, canManageDrugs = true, canManageBusinesses = true, canManageHeists = true, canManageVehicles = true, canManageStashes = true, canDeclareWar = true, canManageSettings = true }
+}
+Config.Gangs.defaultColor = '#000000'
+Config.Gangs.defaultLogo = nil
